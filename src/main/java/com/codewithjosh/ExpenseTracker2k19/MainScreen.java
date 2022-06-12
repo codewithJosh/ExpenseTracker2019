@@ -1,8 +1,9 @@
 package main.java.com.codewithjosh.ExpenseTracker2k19;
 
 import java.awt.*;
+import java.sql.*;
 import javax.swing.*;
-import main.java.com.codewithjosh.ExpenseTracker2k19.functions.ExpenseTracker;
+import main.java.com.codewithjosh.ExpenseTracker2k19.functions.*;
 
 public class MainScreen extends JFrame {
 
@@ -28,6 +29,10 @@ public class MainScreen extends JFrame {
     static int iCurrentYPosition = 0;
     int iFuture = 0;
     int iCurrent = 0;
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    int user_id = 0;
 
     public MainScreen() {
 
@@ -132,6 +137,7 @@ public class MainScreen extends JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 navRegisterFocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 navRegisterFocusLost(evt);
             }
@@ -140,6 +146,7 @@ public class MainScreen extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 navRegisterMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 navRegisterMouseExited(evt);
             }
@@ -183,11 +190,29 @@ public class MainScreen extends JFrame {
         tfUsername.setFont(new java.awt.Font("Dialog", 0, 14));
         tfUsername.setBorder(null);
         tfUsername.setOpaque(false);
+        tfUsername.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tfUsernameFocusGained(evt);
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfUsernameFocusLost(evt);
+            }
+        });
         BodyPanel.add(tfUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 220, 30));
 
         pfPassword.setFont(new java.awt.Font("Dialog", 0, 14));
         pfPassword.setBorder(null);
         pfPassword.setOpaque(false);
+        pfPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                pfPasswordFocusGained(evt);
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                pfPasswordFocusLost(evt);
+            }
+        });
         BodyPanel.add(pfPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 250, 220, 30));
 
         lblProjectName.setFont(new java.awt.Font("Arial", 0, 18));
@@ -197,6 +222,29 @@ public class MainScreen extends JFrame {
 
         btnLogin.setContentAreaFilled(false);
         btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLogin.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnLoginFocusGained(evt);
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                btnLoginFocusLost(evt);
+            }
+        });
+        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnLoginMouseEntered(evt);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnLoginMouseExited(evt);
+            }
+        });
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
         BodyPanel.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 103, 33));
 
         lblUsername.setFont(new java.awt.Font("Dialog", 0, 14));
@@ -356,6 +404,173 @@ public class MainScreen extends JFrame {
 
     }
 
+    private void tfUsernameFocusGained(java.awt.event.FocusEvent evt) {
+
+        tfUsername.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tfUsername.setForeground(new java.awt.Color(51, 153, 255));
+        tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(51, 153, 255)));
+
+        final String sUsername = tfUsername.getText().toLowerCase().trim();
+
+        if (sUsername.equals("enter your username")) {
+            tfUsername.setText("");
+        }
+
+    }
+
+    private void tfUsernameFocusLost(java.awt.event.FocusEvent evt) {
+
+        tfUsername.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        final String sUsername = tfUsername.getText().toLowerCase().trim();
+
+        if (sUsername.equals("")) {
+
+            tfUsername.setText("Enter your Username");
+
+            switch (iCurrent) {
+
+                case 0:
+                    tfUsername.setForeground(Color.BLACK);
+                    tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                    break;
+
+                case 1:
+                    tfUsername.setForeground(Color.GRAY);
+                    tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                    break;
+
+            }
+
+        }
+
+    }
+
+    private void pfPasswordFocusGained(java.awt.event.FocusEvent evt) {
+
+        pfPassword.setText("******");
+        pfPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        pfPassword.setForeground(new java.awt.Color(51, 153, 255));
+        pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(51, 153, 255)));
+
+        final String sPassword = pfPassword.getText().trim();
+
+        if (sPassword.equals("******")) {
+            pfPassword.setText("");
+        }
+
+    }
+
+    private void pfPasswordFocusLost(java.awt.event.FocusEvent evt) {
+
+        pfPassword.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        String sPassword = pfPassword.getText().trim();
+
+        if (sPassword.equals("")) {
+
+            pfPassword.setText("******");
+
+            switch (iCurrent) {
+
+                case 0:
+                    pfPassword.setForeground(Color.BLACK);
+                    pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                    break;
+
+                case 1:
+                    pfPassword.setForeground(Color.GRAY);
+                    pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                    break;
+
+            }
+
+        }
+
+    }
+
+    private void btnLoginMouseExited(java.awt.event.MouseEvent evt) {
+
+        btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("login"))));
+
+    }
+
+    private void btnLoginMouseEntered(java.awt.event.MouseEvent evt) {
+
+        btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("loginhover"))));
+
+    }
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
+
+        final String sUsername = tfUsername.getText().toLowerCase().trim();
+        final String sPassword = pfPassword.getText().trim();
+
+        if (sUsername.equals("enter your username")
+                || sPassword.equals("******")
+                || sUsername.isEmpty()) {
+
+            JOptionPane.showMessageDialog(null, "All fields are required!");
+
+            if (sUsername.equals("enter your username")) {
+
+                switch (iCurrent) {
+
+                    case 0:
+                        tfUsername.setForeground(Color.BLACK);
+                        tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                        break;
+
+                    case 1:
+                        tfUsername.setForeground(Color.GRAY);
+                        tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                        break;
+
+                }
+
+            }
+            if (sPassword.equals("******")) {
+
+                switch (iCurrent) {
+
+                    case 0:
+                        pfPassword.setForeground(Color.BLACK);
+                        pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                        break;
+
+                    case 1:
+                        pfPassword.setForeground(Color.GRAY);
+                        pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                        break;
+
+                }
+
+            }
+
+        } else if (sPassword.length() < 6) {
+
+            JOptionPane.showMessageDialog(null, "Password Must be at least 6 characters!");
+            pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+            pfPassword.setForeground(new java.awt.Color(255, 51, 51));
+
+        } else {
+            onLogin(sUsername, sPassword);
+        }
+
+    }
+
+    private void btnLoginFocusGained(java.awt.event.FocusEvent evt) {
+
+        btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("loginhover"))));
+
+    }
+
+    private void btnLoginFocusLost(java.awt.event.FocusEvent evt) {
+
+        btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("login"))));
+
+    }
+
     public static void main(String args[]) {
 
         try {
@@ -389,6 +604,7 @@ public class MainScreen extends JFrame {
     private void initInstances() {
 
         et = new ExpenseTracker();
+        conn = SQLite.getInstance();
 
     }
 
@@ -503,6 +719,86 @@ public class MainScreen extends JFrame {
         }
 
         iFuture = 0;
+
+    }
+
+    private void onLogin(final String sUsername, final String sPassword) {
+
+        final String sSQL = "SELECT * FROM Users WHERE user_name=? AND user_password=?";
+
+        try {
+
+            ps = conn.prepareStatement(sSQL);
+            ps.setString(1, sUsername);
+            ps.setString(2, sPassword);
+
+            rs = ps.executeQuery();
+            int count = 0;
+            while (rs.next()) {
+
+                count += 1;
+                user_id = rs.getInt("user_id");
+
+            }
+
+            if (count == 1) {
+
+                dispose();
+                final HomeScreen homeScreen = new HomeScreen();
+                homeScreen.setVisible(true);
+                homeScreen.user_id = user_id;
+
+                switch (iCurrent) {
+
+                    case 0:
+                        homeScreen.onDayMode();
+                        break;
+
+                    case 1:
+                        homeScreen.onNightMode();
+                        break;
+
+                }
+
+            } else {
+
+                final String sSQLUsername = "SELECT * FROM Users WHERE user_name=?";
+
+                ps = conn.prepareStatement(sSQLUsername);
+                ps.setString(1, sUsername);
+
+                rs = ps.executeQuery();
+                count = 0;
+                while (rs.next()) {
+                    count += 1;
+                }
+
+                if (count == 1) {
+
+                    JOptionPane.showMessageDialog(null, "Incorrect Password!");
+
+                } else {
+
+                    JOptionPane.showMessageDialog(null, "User Doesn't Exist!");
+                    tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+                    tfUsername.setForeground(new java.awt.Color(255, 51, 51));
+
+                }
+
+                pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+                pfPassword.setForeground(new java.awt.Color(255, 51, 51));
+
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch (HeadlessException | SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "Connection Lost! Reconnecting...");
+            conn = SQLite.getInstance();
+
+        }
 
     }
 

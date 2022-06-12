@@ -23,6 +23,9 @@ public class ExpenseTracker {
             case "login":
                 return sResources.replace("%", "login");
 
+            case "loginhover":
+                return sResources.replace("%", "login_hover");
+
             case "logo":
                 return sResources.replace("%", "logo");
 
