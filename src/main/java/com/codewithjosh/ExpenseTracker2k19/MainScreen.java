@@ -128,6 +128,27 @@ public class MainScreen extends JFrame {
 
         navRegister.setContentAreaFilled(false);
         navRegister.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        navRegister.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                navRegisterFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                navRegisterFocusLost(evt);
+            }
+        });
+        navRegister.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                navRegisterMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                navRegisterMouseExited(evt);
+            }
+        });
+        navRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                navRegisterActionPerformed(evt);
+            }
+        });
         BodyPanel.add(navRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 470, 147, 33));
 
         btnMode.setContentAreaFilled(false);
@@ -283,6 +304,52 @@ public class MainScreen extends JFrame {
             case 1:
                 onDayMode(false);
                 iCurrent = 0;
+                break;
+
+        }
+
+    }
+
+    private void navRegisterFocusGained(java.awt.event.FocusEvent evt) {
+
+        navRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navregisterhover"))));
+
+    }
+
+    private void navRegisterFocusLost(java.awt.event.FocusEvent evt) {
+
+        navRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navregister"))));
+
+    }
+
+    private void navRegisterMouseExited(java.awt.event.MouseEvent evt) {
+
+        navRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navregister"))));
+
+    }
+
+    private void navRegisterMouseEntered(java.awt.event.MouseEvent evt) {
+
+        navRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navregisterhover"))));
+
+    }
+
+    private void navRegisterActionPerformed(java.awt.event.ActionEvent evt) {
+
+        dispose();
+        final RegisterScreen registerScreen = new RegisterScreen();
+        registerScreen.setVisible(true);
+
+        switch (iCurrent) {
+
+            case 0:
+                registerScreen.onDayMode();
+                registerScreen.iCurrent = 0;
+                break;
+
+            case 1:
+                registerScreen.onNightMode();
+                registerScreen.iCurrent = 1;
                 break;
 
         }

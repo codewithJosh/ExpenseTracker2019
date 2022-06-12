@@ -29,6 +29,9 @@ public class ExpenseTracker {
             case "navregister":
                 return sResources.replace("%", "nav_register");
 
+            case "navregisterhover":
+                return sResources.replace("%", "nav_register_hover");
+
             case "night":
                 return sResources.replace("%", "night");
 
