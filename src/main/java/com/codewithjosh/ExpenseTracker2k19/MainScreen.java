@@ -24,6 +24,8 @@ public class MainScreen extends JFrame {
     private javax.swing.JTextField tfUsername;
 
     ExpenseTracker et;
+    static int iCurrentXPosition = 0;
+    static int iCurrentYPosition = 0;
 
     public MainScreen() {
 
@@ -63,14 +65,54 @@ public class MainScreen extends JFrame {
         btnMinimize.setForeground(new java.awt.Color(240, 240, 240));
         btnMinimize.setText("—");
         btnMinimize.setContentAreaFilled(false);
+        btnMinimize.addActionListener((java.awt.event.ActionEvent evt) -> {
+            btnMinimizeActionPerformed(evt);
+        });
         HeadPanel.add(btnMinimize, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 0, -1, 30));
 
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 14));
         btnClose.setForeground(new java.awt.Color(240, 240, 240));
         btnClose.setText("X");
         btnClose.setContentAreaFilled(false);
+        btnClose.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnCloseFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                btnCloseFocusLost(evt);
+            }
+        });
+        btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCloseMouseEntered(evt);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCloseMouseExited(evt);
+            }
+        });
+        btnClose.addActionListener((java.awt.event.ActionEvent evt) -> {
+            btnCloseActionPerformed(evt);
+        });
         HeadPanel.add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(356, 0, -1, 30));
 
+        lblHead.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                lblHeadMouseDragged(evt);
+            }
+        });
+        lblHead.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblHeadMousePressed(evt);
+            }
+        });
         HeadPanel.add(lblHead, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 30));
 
         getContentPane().add(HeadPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
@@ -125,6 +167,58 @@ public class MainScreen extends JFrame {
 
         pack();
         setLocationRelativeTo(null);
+
+    }
+
+    private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {
+
+        setState(ICONIFIED);
+
+    }
+
+    private void btnCloseFocusGained(java.awt.event.FocusEvent evt) {
+
+        btnClose.setForeground(new java.awt.Color(255, 51, 51));
+
+    }
+
+    private void btnCloseFocusLost(java.awt.event.FocusEvent evt) {
+
+        btnClose.setForeground(new java.awt.Color(240, 240, 240));
+
+    }
+
+    private void btnCloseMouseEntered(java.awt.event.MouseEvent evt) {
+
+        btnClose.setForeground(new java.awt.Color(255, 51, 51));
+
+    }
+
+    private void btnCloseMouseExited(java.awt.event.MouseEvent evt) {
+
+        btnClose.setForeground(new java.awt.Color(240, 240, 240));
+
+    }
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {
+
+        System.exit(0);
+
+    }
+
+    private void lblHeadMousePressed(java.awt.event.MouseEvent evt) {
+
+        iCurrentXPosition = evt.getX();
+        iCurrentYPosition = evt.getY();
+
+    }
+
+    private void lblHeadMouseDragged(java.awt.event.MouseEvent evt) {
+
+        final int iFutureXPosition = evt.getXOnScreen();
+        final int iFutureYPosition = evt.getYOnScreen();
+
+        setLocation(iFutureXPosition - iCurrentXPosition, iFutureYPosition - iCurrentYPosition);
 
     }
 
