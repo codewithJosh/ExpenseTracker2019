@@ -1,6 +1,6 @@
 package main.java.com.codewithjosh.ExpenseTracker2k19;
 
-import java.awt.Toolkit;
+import java.awt.*;
 import javax.swing.*;
 import main.java.com.codewithjosh.ExpenseTracker2k19.functions.ExpenseTracker;
 
@@ -26,6 +26,8 @@ public class MainScreen extends JFrame {
     ExpenseTracker et;
     static int iCurrentXPosition = 0;
     static int iCurrentYPosition = 0;
+    int iFuture = 0;
+    int iCurrent = 0;
 
     public MainScreen() {
 
@@ -130,6 +132,29 @@ public class MainScreen extends JFrame {
 
         btnMode.setContentAreaFilled(false);
         btnMode.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMode.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnModeFocusGained(evt);
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                btnModeFocusLost(evt);
+            }
+        });
+        btnMode.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnModeMouseEntered(evt);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnModeMouseExited(evt);
+            }
+        });
+        btnMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModeActionPerformed(evt);
+            }
+        });
         BodyPanel.add(btnMode, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 30, 55, 52));
         BodyPanel.add(lblTail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 400, 168));
         BodyPanel.add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 112, 106));
@@ -222,6 +247,48 @@ public class MainScreen extends JFrame {
 
     }
 
+    private void btnModeFocusGained(java.awt.event.FocusEvent evt) {
+
+        onMode();
+
+    }
+
+    private void btnModeFocusLost(java.awt.event.FocusEvent evt) {
+
+        offMode();
+
+    }
+
+    private void btnModeMouseEntered(java.awt.event.MouseEvent evt) {
+
+        onMode();
+
+    }
+
+    private void btnModeMouseExited(java.awt.event.MouseEvent evt) {
+
+        offMode();
+
+    }
+
+    private void btnModeActionPerformed(java.awt.event.ActionEvent evt) {
+
+        switch (iCurrent) {
+
+            case 0:
+                onNightMode(false);
+                iCurrent = 1;
+                break;
+
+            case 1:
+                onDayMode(false);
+                iCurrent = 0;
+                break;
+
+        }
+
+    }
+
     public static void main(String args[]) {
 
         try {
@@ -269,6 +336,106 @@ public class MainScreen extends JFrame {
         lblUsername.grabFocus();
         tfUsername.setText("Enter your Username");
         pfPassword.setText("******");
+
+        switch (iCurrent) {
+
+            case 0:
+                onDayMode(true);
+                break;
+
+            case 1:
+                onNightMode(true);
+                break;
+
+        }
+
+    }
+
+    private void onMode() {
+
+        switch (iFuture) {
+            case 0:
+                btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("dayhover"))));
+                break;
+
+            case 1:
+                btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("nighthover"))));
+                break;
+        }
+
+    }
+
+    private void offMode() {
+
+        switch (iFuture) {
+
+            case 0:
+                btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("day"))));
+                break;
+
+            case 1:
+                btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("night"))));
+                break;
+
+        }
+
+    }
+
+    public void onDayMode(boolean isInitial) {
+
+        final String sUsername = tfUsername.getText().toLowerCase().trim();
+        final String sPassword = pfPassword.getText().trim();
+
+        BodyPanel.setBackground(new java.awt.Color(240, 240, 240));
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("daylogo"))));
+        btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(isInitial ? et.getString("night") : et.getString("nighthover"))));
+        lblProjectName.setForeground(new java.awt.Color(51, 51, 51));
+        lblUsername.setForeground(new java.awt.Color(51, 51, 51));
+        lblPassword.setForeground(new java.awt.Color(51, 51, 51));
+
+        if (sUsername.equals("enter your username")) {
+
+            tfUsername.setForeground(Color.BLACK);
+            tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+
+        }
+        if (sPassword.equals("******")) {
+
+            pfPassword.setForeground(Color.BLACK);
+            pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+
+        }
+
+        iFuture = 1;
+
+    }
+
+    public void onNightMode(boolean isInitial) {
+
+        final String sUsername = tfUsername.getText().toLowerCase().trim();
+        final String sPassword = pfPassword.getText().trim();
+
+        btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(isInitial ? et.getString("day") : et.getString("dayhover"))));
+        BodyPanel.setBackground(new java.awt.Color(41, 41, 41));
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("nightlogo"))));
+        lblProjectName.setForeground(new java.awt.Color(240, 240, 240));
+        lblUsername.setForeground(new java.awt.Color(240, 240, 240));
+        lblPassword.setForeground(new java.awt.Color(240, 240, 240));
+
+        if (sUsername.equals("enter your username")) {
+
+            tfUsername.setForeground(Color.GRAY);
+            tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+
+        }
+        if (sPassword.equals("******")) {
+
+            pfPassword.setForeground(Color.GRAY);
+            pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+
+        }
+
+        iFuture = 0;
 
     }
 
