@@ -145,6 +145,31 @@ public class RegisterScreen extends JFrame {
 
         navLogin.setContentAreaFilled(false);
         navLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        navLogin.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                navLoginFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                navLoginFocusLost(evt);
+            }
+        });
+        navLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                navLoginMouseEntered(evt);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                navLoginMouseExited(evt);
+            }
+        });
+        navLogin.addActionListener((java.awt.event.ActionEvent evt) -> {
+            navLoginActionPerformed(evt);
+        });
         BodyPanel.add(navLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 147, 33));
 
         lblPassword.setFont(new java.awt.Font("Dialog", 0, 14));
@@ -292,6 +317,52 @@ public class RegisterScreen extends JFrame {
             case 1:
                 onDayMode(false);
                 iCurrent = 0;
+                break;
+
+        }
+
+    }
+
+    private void navLoginFocusGained(java.awt.event.FocusEvent evt) {
+
+        navLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navloginhover"))));
+
+    }
+
+    private void navLoginFocusLost(java.awt.event.FocusEvent evt) {
+
+        navLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navlogin"))));
+
+    }
+
+    private void navLoginMouseExited(java.awt.event.MouseEvent evt) {
+
+        navLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navlogin"))));
+
+    }
+
+    private void navLoginMouseEntered(java.awt.event.MouseEvent evt) {
+
+        navLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navloginhover"))));
+
+    }
+
+    private void navLoginActionPerformed(java.awt.event.ActionEvent evt) {
+
+        dispose();
+        final MainScreen MainScreen = new MainScreen();
+        MainScreen.setVisible(true);
+
+        switch (iCurrent) {
+
+            case 0:
+                MainScreen.onDayMode(true);
+                MainScreen.iCurrent = 0;
+                break;
+
+            case 1:
+                MainScreen.onNightMode(true);
+                MainScreen.iCurrent = 1;
                 break;
 
         }
