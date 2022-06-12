@@ -134,54 +134,58 @@ public class MainScreen extends JFrame {
         navRegister.setContentAreaFilled(false);
         navRegister.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         navRegister.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 navRegisterFocusGained(evt);
             }
 
+            @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 navRegisterFocusLost(evt);
             }
         });
         navRegister.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 navRegisterMouseEntered(evt);
             }
 
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 navRegisterMouseExited(evt);
             }
         });
-        navRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                navRegisterActionPerformed(evt);
-            }
+        navRegister.addActionListener((java.awt.event.ActionEvent evt) -> {
+            navRegisterActionPerformed(evt);
         });
         BodyPanel.add(navRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 470, 147, 33));
 
         btnMode.setContentAreaFilled(false);
         btnMode.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMode.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 btnModeFocusGained(evt);
             }
 
+            @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 btnModeFocusLost(evt);
             }
         });
         btnMode.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnModeMouseEntered(evt);
             }
 
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnModeMouseExited(evt);
             }
         });
-        btnMode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModeActionPerformed(evt);
-            }
+        btnMode.addActionListener((java.awt.event.ActionEvent evt) -> {
+            btnModeActionPerformed(evt);
         });
         BodyPanel.add(btnMode, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 30, 55, 52));
         BodyPanel.add(lblTail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 400, 168));
@@ -191,10 +195,12 @@ public class MainScreen extends JFrame {
         tfUsername.setBorder(null);
         tfUsername.setOpaque(false);
         tfUsername.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tfUsernameFocusGained(evt);
             }
 
+            @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tfUsernameFocusLost(evt);
             }
@@ -205,10 +211,12 @@ public class MainScreen extends JFrame {
         pfPassword.setBorder(null);
         pfPassword.setOpaque(false);
         pfPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 pfPasswordFocusGained(evt);
             }
 
+            @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 pfPasswordFocusLost(evt);
             }
@@ -223,27 +231,29 @@ public class MainScreen extends JFrame {
         btnLogin.setContentAreaFilled(false);
         btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLogin.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 btnLoginFocusGained(evt);
             }
 
+            @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 btnLoginFocusLost(evt);
             }
         });
         btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnLoginMouseEntered(evt);
             }
 
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnLoginMouseExited(evt);
             }
         });
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
+        btnLogin.addActionListener((java.awt.event.ActionEvent evt) -> {
+            btnLoginActionPerformed(evt);
         });
         BodyPanel.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 103, 33));
 
@@ -391,12 +401,12 @@ public class MainScreen extends JFrame {
         switch (iCurrent) {
 
             case 0:
-                registerScreen.onDayMode();
+                registerScreen.onDayMode(true);
                 registerScreen.iCurrent = 0;
                 break;
 
             case 1:
-                registerScreen.onNightMode();
+                registerScreen.onNightMode(true);
                 registerScreen.iCurrent = 1;
                 break;
 
