@@ -53,6 +53,9 @@ public class ExpenseTracker {
             case "register":
                 return sResources.replace("%", "register");
 
+            case "registerhover":
+                return sResources.replace("%", "register_hover");
+
             case "taillogin":
                 return sResources.replace("%", "tail_login");
 

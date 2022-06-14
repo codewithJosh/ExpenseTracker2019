@@ -517,8 +517,7 @@ public class MainScreen extends JFrame {
         final String sPassword = pfPassword.getText().trim();
 
         if (sUsername.equals("enter your username")
-                || sPassword.equals("******")
-                || sUsername.isEmpty()) {
+                || sPassword.equals("******")) {
 
             JOptionPane.showMessageDialog(null, "All fields are required!");
 

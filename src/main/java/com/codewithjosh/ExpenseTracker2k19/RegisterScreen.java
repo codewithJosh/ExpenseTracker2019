@@ -1,8 +1,9 @@
 package main.java.com.codewithjosh.ExpenseTracker2k19;
 
 import java.awt.*;
+import java.sql.*;
 import javax.swing.*;
-import main.java.com.codewithjosh.ExpenseTracker2k19.functions.ExpenseTracker;
+import main.java.com.codewithjosh.ExpenseTracker2k19.functions.*;
 
 public class RegisterScreen extends JFrame {
 
@@ -29,6 +30,9 @@ public class RegisterScreen extends JFrame {
     static int iCurrentYPosition = 0;
     int iFuture = 0;
     int iCurrent = 0;
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
 
     public RegisterScreen() {
 
@@ -127,16 +131,49 @@ public class RegisterScreen extends JFrame {
         tfUsername.setFont(new java.awt.Font("Dialog", 0, 14));
         tfUsername.setBorder(null);
         tfUsername.setOpaque(false);
+        tfUsername.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tfUsernameFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfUsernameFocusLost(evt);
+            }
+        });
         BodyPanel.add(tfUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 220, 30));
 
         pfPassword.setFont(new java.awt.Font("Dialog", 0, 14));
         pfPassword.setBorder(null);
         pfPassword.setOpaque(false);
+        pfPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                pfPasswordFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                pfPasswordFocusLost(evt);
+            }
+        });
         BodyPanel.add(pfPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 220, 30));
 
         pfRePassword.setFont(new java.awt.Font("Dialog", 0, 14));
         pfRePassword.setBorder(null);
         pfRePassword.setOpaque(false);
+        pfRePassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                pfRePasswordFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                pfRePasswordFocusLost(evt);
+            }
+        });
         BodyPanel.add(pfRePassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 220, 30));
 
         lblQuestion.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -182,6 +219,31 @@ public class RegisterScreen extends JFrame {
 
         btnRegister.setContentAreaFilled(false);
         btnRegister.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegister.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnRegisterFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                btnRegisterFocusLost(evt);
+            }
+        });
+        btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnRegisterMouseEntered(evt);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnRegisterMouseExited(evt);
+            }
+        });
+        btnRegister.addActionListener((java.awt.event.ActionEvent evt) -> {
+            btnRegisterActionPerformed(evt);
+        });
         BodyPanel.add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, 103, 33));
 
         lblUsername.setFont(new java.awt.Font("Dialog", 0, 14));
@@ -369,6 +431,242 @@ public class RegisterScreen extends JFrame {
 
     }
 
+    private void tfUsernameFocusGained(java.awt.event.FocusEvent evt) {
+
+        tfUsername.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tfUsername.setForeground(new java.awt.Color(51, 153, 255));
+        tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(51, 153, 255)));
+
+        final String sUsername = tfUsername.getText().toLowerCase().trim();
+
+        if (sUsername.equals("enter your username")) {
+            tfUsername.setText("");
+        }
+
+    }
+
+    private void tfUsernameFocusLost(java.awt.event.FocusEvent evt) {
+
+        tfUsername.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        final String sUsername = tfUsername.getText().toLowerCase().trim();
+
+        if (sUsername.equals("")) {
+
+            tfUsername.setText("Enter your Username");
+
+            switch (iCurrent) {
+
+                case 0:
+                    tfUsername.setForeground(Color.BLACK);
+                    tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                    break;
+
+                case 1:
+                    tfUsername.setForeground(Color.GRAY);
+                    tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                    break;
+
+            }
+
+        }
+
+    }
+
+    private void pfPasswordFocusGained(java.awt.event.FocusEvent evt) {
+
+        pfPassword.setText("******");
+        pfPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        pfPassword.setForeground(new java.awt.Color(51, 153, 255));
+        pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(51, 153, 255)));
+
+        final String sPassword = pfPassword.getText().trim();
+
+        if (sPassword.equals("******")) {
+            pfPassword.setText("");
+        }
+
+    }
+
+    private void pfPasswordFocusLost(java.awt.event.FocusEvent evt) {
+
+        pfPassword.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        String sPassword = pfPassword.getText().trim();
+
+        if (sPassword.equals("")) {
+
+            pfPassword.setText("******");
+
+            switch (iCurrent) {
+
+                case 0:
+                    pfPassword.setForeground(Color.BLACK);
+                    pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                    break;
+
+                case 1:
+                    pfPassword.setForeground(Color.GRAY);
+                    pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                    break;
+
+            }
+
+        }
+
+    }
+
+    private void pfRePasswordFocusGained(java.awt.event.FocusEvent evt) {
+
+        pfRePassword.setText("******");
+        pfRePassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        pfRePassword.setForeground(new java.awt.Color(51, 153, 255));
+        pfRePassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(51, 153, 255)));
+
+        final String sRePassword = pfRePassword.getText().trim();
+
+        if (sRePassword.equals("******")) {
+            pfRePassword.setText("");
+        }
+
+    }
+
+    private void pfRePasswordFocusLost(java.awt.event.FocusEvent evt) {
+
+        pfRePassword.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        String sRePassword = pfRePassword.getText().trim();
+
+        if (sRePassword.equals("")) {
+
+            pfRePassword.setText("******");
+
+            switch (iCurrent) {
+
+                case 0:
+                    pfRePassword.setForeground(Color.BLACK);
+                    pfRePassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                    break;
+
+                case 1:
+                    pfRePassword.setForeground(Color.GRAY);
+                    pfRePassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                    break;
+
+            }
+
+        }
+
+    }
+
+    private void btnRegisterFocusGained(java.awt.event.FocusEvent evt) {
+
+        btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("registerhover"))));
+
+    }
+
+    private void btnRegisterFocusLost(java.awt.event.FocusEvent evt) {
+
+        btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("register"))));
+
+    }
+
+    private void btnRegisterMouseExited(java.awt.event.MouseEvent evt) {
+
+        btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("register"))));
+
+    }
+
+    private void btnRegisterMouseEntered(java.awt.event.MouseEvent evt) {
+
+        btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("registerhover"))));
+
+    }
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {
+
+        final String sUsername = tfUsername.getText().toLowerCase().trim();
+        final String sPassword = pfPassword.getText().trim();
+        final String sRePassword = pfRePassword.getText().trim();
+
+        if (sUsername.equals("enter your username")
+                || sPassword.equals("******")
+                || sRePassword.equals("******")) {
+
+            JOptionPane.showMessageDialog(null, "All fields are required!");
+
+            if (sUsername.equals("enter your username")) {
+
+                switch (iCurrent) {
+
+                    case 0:
+                        tfUsername.setForeground(Color.BLACK);
+                        tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                        break;
+
+                    case 1:
+                        tfUsername.setForeground(Color.GRAY);
+                        tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                        break;
+
+                }
+
+            }
+            if (sPassword.equals("******")) {
+
+                switch (iCurrent) {
+
+                    case 0:
+                        pfPassword.setForeground(Color.BLACK);
+                        pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                        break;
+
+                    case 1:
+                        pfPassword.setForeground(Color.GRAY);
+                        pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                        break;
+
+                }
+
+            }
+            if (sRePassword.equals("******")) {
+
+                switch (iCurrent) {
+
+                    case 0:
+                        pfRePassword.setForeground(Color.BLACK);
+                        pfRePassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+                        break;
+
+                    case 1:
+                        pfRePassword.setForeground(Color.GRAY);
+                        pfRePassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+                        break;
+
+                }
+
+            }
+
+        } else if (sPassword.length() < 6) {
+
+            JOptionPane.showMessageDialog(null, "Password Must be at least 6 characters!");
+            pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+            pfPassword.setForeground(new java.awt.Color(255, 51, 51));
+
+        } else if (!sPassword.equals(sRePassword)) {
+
+            JOptionPane.showMessageDialog(null, "Password doesn't match!");
+            pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+            pfPassword.setForeground(new java.awt.Color(255, 51, 51));
+            pfRePassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+            pfRePassword.setForeground(new java.awt.Color(255, 51, 51));
+
+        } else {
+            onRegister(sUsername, sPassword);
+        }
+
+    }
+
     public static void main(String args[]) {
 
         try {
@@ -402,6 +700,7 @@ public class RegisterScreen extends JFrame {
     private void initInstances() {
 
         et = new ExpenseTracker();
+        conn = SQLite.getInstance();
 
     }
 
@@ -531,6 +830,77 @@ public class RegisterScreen extends JFrame {
         }
 
         iFuture = 0;
+
+    }
+
+    private void onRegister(final String sUsername, final String sPassword) {
+
+        String sql = "SELECT * FROM Users WHERE user_name=?";
+
+        try {
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, sUsername);
+
+            rs = ps.executeQuery();
+            int count = 0;
+            while (rs.next()) {
+
+                count += 1;
+
+            }
+
+            switch (count) {
+
+                case 0:
+
+                    sql = "INSERT INTO Users (user_name, user_password) VALUES (?,?)";
+
+                    ps = conn.prepareStatement(sql);
+                    ps.setString(1, sUsername);
+                    ps.setString(2, sPassword);
+
+                    ps.execute();
+                    JOptionPane.showMessageDialog(null, "You're Successfully Added!");
+
+                    conn.close();
+                    dispose();
+                    final MainScreen MainScreen = new MainScreen();
+                    MainScreen.setVisible(true);
+
+                    switch (iCurrent) {
+
+                        case 0:
+                            MainScreen.onDayMode(true);
+                            MainScreen.iCurrent = 0;
+                            break;
+
+                        case 1:
+                            MainScreen.onNightMode(true);
+                            MainScreen.iCurrent = 1;
+                            break;
+
+                    }
+
+                    break;
+
+                case 1:
+                    JOptionPane.showMessageDialog(null, "Username is Already Taken!");
+                    tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+                    tfUsername.setForeground(new java.awt.Color(255, 51, 51));
+                    break;
+
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch (HeadlessException | SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "Please Contact Your Service Provider");
+            conn = SQLite.getInstance();
+
+        }
 
     }
 
