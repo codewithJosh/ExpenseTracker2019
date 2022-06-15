@@ -1,12 +1,15 @@
 package main.java.com.codewithjosh.ExpenseTracker2k19.functions;
 
-public class ExpenseTracker {
+public class ExpenseTracker
+{
 
-    public String getString(final String stringOf) {
+    public String getString(final String stringOf)
+    {
 
         final String sResources = "/main/res/ic_%.png";
 
-        switch (stringOf.toLowerCase()) {
+        switch (stringOf.toLowerCase())
+        {
 
             case "day":
                 return sResources.replace("%", "day");
