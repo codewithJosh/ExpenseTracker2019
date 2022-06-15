@@ -1,12 +1,15 @@
 package main.java.com.codewithjosh.ExpenseTracker2k19.functions;
 
-public class ExpenseTracker {
+public class ExpenseTracker
+{
 
-    public String getString(final String stringOf) {
+    public String getString(final String stringOf)
+    {
 
         final String sResources = "/main/res/ic_%.png";
 
-        switch (stringOf.toLowerCase()) {
+        switch (stringOf.toLowerCase())
+        {
 
             case "day":
                 return sResources.replace("%", "day");
@@ -29,6 +32,12 @@ public class ExpenseTracker {
             case "logo":
                 return sResources.replace("%", "logo");
 
+            case "navlogin":
+                return sResources.replace("%", "nav_login");
+
+            case "navloginhover":
+                return sResources.replace("%", "nav_login_hover");
+
             case "navregister":
                 return sResources.replace("%", "nav_register");
 
@@ -44,8 +53,17 @@ public class ExpenseTracker {
             case "nightlogo":
                 return sResources.replace("%", "night_logo");
 
+            case "register":
+                return sResources.replace("%", "register");
+
+            case "registerhover":
+                return sResources.replace("%", "register_hover");
+
             case "taillogin":
                 return sResources.replace("%", "tail_login");
+
+            case "tailregister":
+                return sResources.replace("%", "tail_register");
 
             case "":
                 return sResources.replace("%", "");

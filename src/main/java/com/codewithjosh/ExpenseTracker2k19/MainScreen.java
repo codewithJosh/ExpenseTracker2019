@@ -2,10 +2,12 @@ package main.java.com.codewithjosh.ExpenseTracker2k19;
 
 import java.awt.*;
 import java.sql.*;
+import java.util.logging.*;
 import javax.swing.*;
 import main.java.com.codewithjosh.ExpenseTracker2k19.functions.*;
 
-public class MainScreen extends JFrame {
+public class MainScreen extends JFrame
+{
 
     private javax.swing.JPanel BodyPanel;
     private javax.swing.JPanel HeadPanel;
@@ -34,7 +36,8 @@ public class MainScreen extends JFrame {
     ResultSet rs = null;
     int user_id = 0;
 
-    public MainScreen() {
+    public MainScreen()
+    {
 
         initComponents();
         initInstances();
@@ -42,7 +45,8 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void initComponents() {
+    private void initComponents()
+    {
 
         HeadPanel = new javax.swing.JPanel();
         btnMinimize = new javax.swing.JButton();
@@ -72,53 +76,75 @@ public class MainScreen extends JFrame {
         btnMinimize.setForeground(new java.awt.Color(240, 240, 240));
         btnMinimize.setText("—");
         btnMinimize.setContentAreaFilled(false);
-        btnMinimize.addActionListener((java.awt.event.ActionEvent evt) -> {
+        btnMinimize.addActionListener((java.awt.event.ActionEvent evt)
+                ->
+        {
             btnMinimizeActionPerformed(evt);
-        });
+                });
         HeadPanel.add(btnMinimize, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 0, -1, 30));
 
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 14));
         btnClose.setForeground(new java.awt.Color(240, 240, 240));
         btnClose.setText("X");
         btnClose.setContentAreaFilled(false);
-        btnClose.addFocusListener(new java.awt.event.FocusAdapter() {
+        btnClose.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+
             @Override
-            public void focusGained(java.awt.event.FocusEvent evt) {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 btnCloseFocusGained(evt);
             }
 
             @Override
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 btnCloseFocusLost(evt);
             }
+
         });
-        btnClose.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnClose.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
                 btnCloseMouseEntered(evt);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
                 btnCloseMouseExited(evt);
             }
+
         });
-        btnClose.addActionListener((java.awt.event.ActionEvent evt) -> {
+        btnClose.addActionListener((java.awt.event.ActionEvent evt)
+                ->
+        {
             btnCloseActionPerformed(evt);
-        });
+                });
         HeadPanel.add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(356, 0, -1, 30));
 
-        lblHead.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        lblHead.addMouseMotionListener(new java.awt.event.MouseMotionAdapter()
+        {
+
             @Override
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
+            public void mouseDragged(java.awt.event.MouseEvent evt)
+            {
                 lblHeadMouseDragged(evt);
             }
+
         });
-        lblHead.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblHead.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
             @Override
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt)
+            {
                 lblHeadMousePressed(evt);
             }
+
         });
         HeadPanel.add(lblHead, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 30));
 
@@ -133,56 +159,84 @@ public class MainScreen extends JFrame {
 
         navRegister.setContentAreaFilled(false);
         navRegister.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        navRegister.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        navRegister.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 navRegisterFocusGained(evt);
             }
 
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 navRegisterFocusLost(evt);
             }
+
         });
-        navRegister.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        navRegister.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
                 navRegisterMouseEntered(evt);
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
                 navRegisterMouseExited(evt);
             }
+
         });
-        navRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                navRegisterActionPerformed(evt);
-            }
-        });
+        navRegister.addActionListener((java.awt.event.ActionEvent evt)
+                ->
+        {
+            navRegisterActionPerformed(evt);
+                });
         BodyPanel.add(navRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 470, 147, 33));
 
         btnMode.setContentAreaFilled(false);
         btnMode.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMode.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        btnMode.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 btnModeFocusGained(evt);
             }
 
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 btnModeFocusLost(evt);
             }
+
         });
-        btnMode.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        btnMode.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
                 btnModeMouseEntered(evt);
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
                 btnModeMouseExited(evt);
             }
+
         });
-        btnMode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModeActionPerformed(evt);
-            }
-        });
+        btnMode.addActionListener((java.awt.event.ActionEvent evt)
+                ->
+        {
+            btnModeActionPerformed(evt);
+                });
         BodyPanel.add(btnMode, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 30, 55, 52));
         BodyPanel.add(lblTail, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 400, 168));
         BodyPanel.add(lblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 112, 106));
@@ -190,28 +244,42 @@ public class MainScreen extends JFrame {
         tfUsername.setFont(new java.awt.Font("Dialog", 0, 14));
         tfUsername.setBorder(null);
         tfUsername.setOpaque(false);
-        tfUsername.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        tfUsername.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 tfUsernameFocusGained(evt);
             }
 
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 tfUsernameFocusLost(evt);
             }
+
         });
         BodyPanel.add(tfUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 220, 30));
 
         pfPassword.setFont(new java.awt.Font("Dialog", 0, 14));
         pfPassword.setBorder(null);
         pfPassword.setOpaque(false);
-        pfPassword.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        pfPassword.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 pfPasswordFocusGained(evt);
             }
 
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 pfPasswordFocusLost(evt);
             }
+
         });
         BodyPanel.add(pfPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 250, 220, 30));
 
@@ -222,29 +290,43 @@ public class MainScreen extends JFrame {
 
         btnLogin.setContentAreaFilled(false);
         btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLogin.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
+        btnLogin.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
                 btnLoginFocusGained(evt);
             }
 
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
                 btnLoginFocusLost(evt);
             }
+
         });
-        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        btnLogin.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
                 btnLoginMouseEntered(evt);
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
                 btnLoginMouseExited(evt);
             }
+
         });
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
+        btnLogin.addActionListener((java.awt.event.ActionEvent evt)
+                ->
+        {
+            btnLoginActionPerformed(evt);
+                });
         BodyPanel.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 103, 33));
 
         lblUsername.setFont(new java.awt.Font("Dialog", 0, 14));
@@ -264,85 +346,100 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt)
+    {
 
         setState(ICONIFIED);
 
     }
 
-    private void btnCloseFocusGained(java.awt.event.FocusEvent evt) {
+    private void btnCloseFocusGained(java.awt.event.FocusEvent evt)
+    {
 
         btnClose.setForeground(new java.awt.Color(255, 51, 51));
 
     }
 
-    private void btnCloseFocusLost(java.awt.event.FocusEvent evt) {
+    private void btnCloseFocusLost(java.awt.event.FocusEvent evt)
+    {
 
         btnClose.setForeground(new java.awt.Color(240, 240, 240));
 
     }
 
-    private void btnCloseMouseEntered(java.awt.event.MouseEvent evt) {
+    private void btnCloseMouseEntered(java.awt.event.MouseEvent evt)
+    {
 
         btnClose.setForeground(new java.awt.Color(255, 51, 51));
 
     }
 
-    private void btnCloseMouseExited(java.awt.event.MouseEvent evt) {
+    private void btnCloseMouseExited(java.awt.event.MouseEvent evt)
+    {
 
         btnClose.setForeground(new java.awt.Color(240, 240, 240));
 
     }
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt)
+    {
 
         System.exit(0);
 
     }
 
-    private void lblHeadMousePressed(java.awt.event.MouseEvent evt) {
+    private void lblHeadMousePressed(java.awt.event.MouseEvent evt)
+    {
 
         iCurrentXPosition = evt.getX();
         iCurrentYPosition = evt.getY();
 
     }
 
-    private void lblHeadMouseDragged(java.awt.event.MouseEvent evt) {
+    private void lblHeadMouseDragged(java.awt.event.MouseEvent evt)
+    {
 
         final int iFutureXPosition = evt.getXOnScreen();
         final int iFutureYPosition = evt.getYOnScreen();
 
-        setLocation(iFutureXPosition - iCurrentXPosition, iFutureYPosition - iCurrentYPosition);
+        setLocation(iFutureXPosition - iCurrentXPosition, iFutureYPosition
+                                                                  - iCurrentYPosition);
 
     }
 
-    private void btnModeFocusGained(java.awt.event.FocusEvent evt) {
+    private void btnModeFocusGained(java.awt.event.FocusEvent evt)
+    {
 
         onMode();
 
     }
 
-    private void btnModeFocusLost(java.awt.event.FocusEvent evt) {
+    private void btnModeFocusLost(java.awt.event.FocusEvent evt)
+    {
 
         offMode();
 
     }
 
-    private void btnModeMouseEntered(java.awt.event.MouseEvent evt) {
+    private void btnModeMouseEntered(java.awt.event.MouseEvent evt)
+    {
 
         onMode();
 
     }
 
-    private void btnModeMouseExited(java.awt.event.MouseEvent evt) {
+    private void btnModeMouseExited(java.awt.event.MouseEvent evt)
+    {
 
         offMode();
 
     }
 
-    private void btnModeActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnModeActionPerformed(java.awt.event.ActionEvent evt)
+    {
 
-        switch (iCurrent) {
+        switch (iCurrent)
+        {
 
             case 0:
                 onNightMode(false);
@@ -358,45 +455,51 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void navRegisterFocusGained(java.awt.event.FocusEvent evt) {
+    private void navRegisterFocusGained(java.awt.event.FocusEvent evt)
+    {
 
         navRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navregisterhover"))));
 
     }
 
-    private void navRegisterFocusLost(java.awt.event.FocusEvent evt) {
+    private void navRegisterFocusLost(java.awt.event.FocusEvent evt)
+    {
 
         navRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navregister"))));
 
     }
 
-    private void navRegisterMouseExited(java.awt.event.MouseEvent evt) {
+    private void navRegisterMouseExited(java.awt.event.MouseEvent evt)
+    {
 
         navRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navregister"))));
 
     }
 
-    private void navRegisterMouseEntered(java.awt.event.MouseEvent evt) {
+    private void navRegisterMouseEntered(java.awt.event.MouseEvent evt)
+    {
 
         navRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("navregisterhover"))));
 
     }
 
-    private void navRegisterActionPerformed(java.awt.event.ActionEvent evt) {
+    private void navRegisterActionPerformed(java.awt.event.ActionEvent evt)
+    {
 
         dispose();
         final RegisterScreen registerScreen = new RegisterScreen();
         registerScreen.setVisible(true);
 
-        switch (iCurrent) {
+        switch (iCurrent)
+        {
 
             case 0:
-                registerScreen.onDayMode();
+                registerScreen.onDayMode(true);
                 registerScreen.iCurrent = 0;
                 break;
 
             case 1:
-                registerScreen.onNightMode();
+                registerScreen.onNightMode(true);
                 registerScreen.iCurrent = 1;
                 break;
 
@@ -404,7 +507,8 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void tfUsernameFocusGained(java.awt.event.FocusEvent evt) {
+    private void tfUsernameFocusGained(java.awt.event.FocusEvent evt)
+    {
 
         tfUsername.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         tfUsername.setForeground(new java.awt.Color(51, 153, 255));
@@ -412,23 +516,27 @@ public class MainScreen extends JFrame {
 
         final String sUsername = tfUsername.getText().toLowerCase().trim();
 
-        if (sUsername.equals("enter your username")) {
+        if (sUsername.equals("enter your username"))
+        {
             tfUsername.setText("");
         }
 
     }
 
-    private void tfUsernameFocusLost(java.awt.event.FocusEvent evt) {
+    private void tfUsernameFocusLost(java.awt.event.FocusEvent evt)
+    {
 
         tfUsername.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 
         final String sUsername = tfUsername.getText().toLowerCase().trim();
 
-        if (sUsername.equals("")) {
+        if (sUsername.equals(""))
+        {
 
             tfUsername.setText("Enter your Username");
 
-            switch (iCurrent) {
+            switch (iCurrent)
+            {
 
                 case 0:
                     tfUsername.setForeground(Color.BLACK);
@@ -446,7 +554,8 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void pfPasswordFocusGained(java.awt.event.FocusEvent evt) {
+    private void pfPasswordFocusGained(java.awt.event.FocusEvent evt)
+    {
 
         pfPassword.setText("******");
         pfPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -455,23 +564,27 @@ public class MainScreen extends JFrame {
 
         final String sPassword = pfPassword.getText().trim();
 
-        if (sPassword.equals("******")) {
+        if (sPassword.equals("******"))
+        {
             pfPassword.setText("");
         }
 
     }
 
-    private void pfPasswordFocusLost(java.awt.event.FocusEvent evt) {
+    private void pfPasswordFocusLost(java.awt.event.FocusEvent evt)
+    {
 
         pfPassword.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 
         String sPassword = pfPassword.getText().trim();
 
-        if (sPassword.equals("")) {
+        if (sPassword.equals(""))
+        {
 
             pfPassword.setText("******");
 
-            switch (iCurrent) {
+            switch (iCurrent)
+            {
 
                 case 0:
                     pfPassword.setForeground(Color.BLACK);
@@ -489,32 +602,37 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void btnLoginMouseExited(java.awt.event.MouseEvent evt) {
+    private void btnLoginMouseExited(java.awt.event.MouseEvent evt)
+    {
 
         btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("login"))));
 
     }
 
-    private void btnLoginMouseEntered(java.awt.event.MouseEvent evt) {
+    private void btnLoginMouseEntered(java.awt.event.MouseEvent evt)
+    {
 
         btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("loginhover"))));
 
     }
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt)
+    {
 
         final String sUsername = tfUsername.getText().toLowerCase().trim();
         final String sPassword = pfPassword.getText().trim();
 
         if (sUsername.equals("enter your username")
-                || sPassword.equals("******")
-                || sUsername.isEmpty()) {
+                    || sPassword.equals("******"))
+        {
 
             JOptionPane.showMessageDialog(null, "All fields are required!");
 
-            if (sUsername.equals("enter your username")) {
+            if (sUsername.equals("enter your username"))
+            {
 
-                switch (iCurrent) {
+                switch (iCurrent)
+                {
 
                     case 0:
                         tfUsername.setForeground(Color.BLACK);
@@ -529,9 +647,11 @@ public class MainScreen extends JFrame {
                 }
 
             }
-            if (sPassword.equals("******")) {
+            if (sPassword.equals("******"))
+            {
 
-                switch (iCurrent) {
+                switch (iCurrent)
+                {
 
                     case 0:
                         pfPassword.setForeground(Color.BLACK);
@@ -547,37 +667,48 @@ public class MainScreen extends JFrame {
 
             }
 
-        } else if (sPassword.length() < 6) {
+        }
+        else if (sPassword.length() < 6)
+        {
 
             JOptionPane.showMessageDialog(null, "Password Must be at least 6 characters!");
             pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
             pfPassword.setForeground(new java.awt.Color(255, 51, 51));
 
-        } else {
+        }
+        else
+        {
             onLogin(sUsername, sPassword);
         }
 
     }
 
-    private void btnLoginFocusGained(java.awt.event.FocusEvent evt) {
+    private void btnLoginFocusGained(java.awt.event.FocusEvent evt)
+    {
 
         btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("loginhover"))));
 
     }
 
-    private void btnLoginFocusLost(java.awt.event.FocusEvent evt) {
+    private void btnLoginFocusLost(java.awt.event.FocusEvent evt)
+    {
 
         btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("login"))));
 
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
 
-        try {
+        try
+        {
 
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info
+                         : UIManager.getInstalledLookAndFeels())
+            {
 
-                if ("Windows".equals(info.getName())) {
+                if ("Windows".equals(info.getName()))
+                {
 
                     UIManager.setLookAndFeel(info.getClassName());
                     break;
@@ -586,29 +717,37 @@ public class MainScreen extends JFrame {
 
             }
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+        }
+        catch (ClassNotFoundException
+               | InstantiationException
+               | IllegalAccessException
+               | UnsupportedLookAndFeelException ex)
+        {
 
-            java.util.logging.Logger.getLogger(MainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(MainScreen.class.getName()).log(Level.SEVERE, null, ex);
 
         }
 
-        java.awt.EventQueue.invokeLater(()
-                -> {
+        EventQueue.invokeLater(()
+                ->
+        {
 
             new MainScreen().setVisible(true);
 
-        });
+                });
 
     }
 
-    private void initInstances() {
+    private void initInstances()
+    {
 
         et = new ExpenseTracker();
         conn = SQLite.getInstance();
 
     }
 
-    private void initIcons() {
+    private void initIcons()
+    {
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(et.getString("logo"))));
         lblHead.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("head"))));
@@ -620,7 +759,8 @@ public class MainScreen extends JFrame {
         tfUsername.setText("Enter your Username");
         pfPassword.setText("******");
 
-        switch (iCurrent) {
+        switch (iCurrent)
+        {
 
             case 0:
                 onDayMode(true);
@@ -634,9 +774,11 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void onMode() {
+    private void onMode()
+    {
 
-        switch (iFuture) {
+        switch (iFuture)
+        {
             case 0:
                 btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("dayhover"))));
                 break;
@@ -648,9 +790,11 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void offMode() {
+    private void offMode()
+    {
 
-        switch (iFuture) {
+        switch (iFuture)
+        {
 
             case 0:
                 btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("day"))));
@@ -664,25 +808,30 @@ public class MainScreen extends JFrame {
 
     }
 
-    public void onDayMode(boolean isInitial) {
+    public void onDayMode(boolean isInitial)
+    {
 
         final String sUsername = tfUsername.getText().toLowerCase().trim();
         final String sPassword = pfPassword.getText().trim();
 
         BodyPanel.setBackground(new java.awt.Color(240, 240, 240));
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("daylogo"))));
-        btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(isInitial ? et.getString("night") : et.getString("nighthover"))));
+        btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(isInitial
+                                                                         ? et.getString("night")
+                                                                         : et.getString("nighthover"))));
         lblProjectName.setForeground(new java.awt.Color(51, 51, 51));
         lblUsername.setForeground(new java.awt.Color(51, 51, 51));
         lblPassword.setForeground(new java.awt.Color(51, 51, 51));
 
-        if (sUsername.equals("enter your username")) {
+        if (sUsername.equals("enter your username"))
+        {
 
             tfUsername.setForeground(Color.BLACK);
             tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
 
         }
-        if (sPassword.equals("******")) {
+        if (sPassword.equals("******"))
+        {
 
             pfPassword.setForeground(Color.BLACK);
             pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
@@ -693,25 +842,30 @@ public class MainScreen extends JFrame {
 
     }
 
-    public void onNightMode(boolean isInitial) {
+    public void onNightMode(boolean isInitial)
+    {
 
         final String sUsername = tfUsername.getText().toLowerCase().trim();
         final String sPassword = pfPassword.getText().trim();
 
-        btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(isInitial ? et.getString("day") : et.getString("dayhover"))));
+        btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(isInitial
+                                                                         ? et.getString("day")
+                                                                         : et.getString("dayhover"))));
         BodyPanel.setBackground(new java.awt.Color(41, 41, 41));
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("nightlogo"))));
         lblProjectName.setForeground(new java.awt.Color(240, 240, 240));
         lblUsername.setForeground(new java.awt.Color(240, 240, 240));
         lblPassword.setForeground(new java.awt.Color(240, 240, 240));
 
-        if (sUsername.equals("enter your username")) {
+        if (sUsername.equals("enter your username"))
+        {
 
             tfUsername.setForeground(Color.GRAY);
             tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
 
         }
-        if (sPassword.equals("******")) {
+        if (sPassword.equals("******"))
+        {
 
             pfPassword.setForeground(Color.GRAY);
             pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
@@ -722,80 +876,99 @@ public class MainScreen extends JFrame {
 
     }
 
-    private void onLogin(final String sUsername, final String sPassword) {
+    private void onLogin(final String sUsername, final String sPassword)
+    {
 
-        final String sSQL = "SELECT * FROM Users WHERE user_name=? AND user_password=?";
+        String sql = "SELECT * FROM Users WHERE user_name=? AND user_password=?";
 
-        try {
+        try
+        {
 
-            ps = conn.prepareStatement(sSQL);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, sUsername);
             ps.setString(2, sPassword);
 
             rs = ps.executeQuery();
             int count = 0;
-            while (rs.next()) {
+            while (rs.next())
+            {
 
                 count += 1;
                 user_id = rs.getInt("user_id");
 
             }
 
-            if (count == 1) {
+            switch (count)
+            {
 
-                dispose();
-                final HomeScreen homeScreen = new HomeScreen();
-                homeScreen.setVisible(true);
-                homeScreen.user_id = user_id;
+                case 0:
+                    sql = "SELECT * FROM Users WHERE user_name=?";
 
-                switch (iCurrent) {
+                    ps = conn.prepareStatement(sql);
+                    ps.setString(1, sUsername);
 
-                    case 0:
-                        homeScreen.onDayMode();
-                        break;
+                    rs = ps.executeQuery();
+                    count = 0;
+                    while (rs.next())
+                    {
 
-                    case 1:
-                        homeScreen.onNightMode();
-                        break;
+                        count += 1;
 
-                }
+                    }
 
-            } else {
+                    switch (count)
+                    {
 
-                final String sSQLUsername = "SELECT * FROM Users WHERE user_name=?";
+                        case 0:
+                            JOptionPane.showMessageDialog(null, "User Doesn't Exist!");
+                            tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+                            tfUsername.setForeground(new java.awt.Color(255, 51, 51));
+                            break;
 
-                ps = conn.prepareStatement(sSQLUsername);
-                ps.setString(1, sUsername);
+                        case 1:
+                            JOptionPane.showMessageDialog(null, "Incorrect Password!");
+                            break;
 
-                rs = ps.executeQuery();
-                count = 0;
-                while (rs.next()) {
-                    count += 1;
-                }
+                    }
 
-                if (count == 1) {
+                    pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
+                    pfPassword.setForeground(new java.awt.Color(255, 51, 51));
 
-                    JOptionPane.showMessageDialog(null, "Incorrect Password!");
+                    break;
 
-                } else {
+                case 1:
+                    conn.close();
+                    dispose();
+                    final HomeScreen homeScreen = new HomeScreen();
+                    homeScreen.setVisible(true);
+                    homeScreen.user_id = user_id;
 
-                    JOptionPane.showMessageDialog(null, "User Doesn't Exist!");
-                    tfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
-                    tfUsername.setForeground(new java.awt.Color(255, 51, 51));
+                    switch (iCurrent)
+                    {
 
-                }
+                        case 0:
+                            homeScreen.onDayMode();
+                            break;
 
-                pfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 51, 51)));
-                pfPassword.setForeground(new java.awt.Color(255, 51, 51));
+                        case 1:
+                            homeScreen.onNightMode();
+                            break;
+
+                    }
+
+                    break;
 
             }
 
             rs.close();
             ps.close();
 
-        } catch (HeadlessException | SQLException ex) {
+        }
+        catch (HeadlessException
+               | SQLException ex)
+        {
 
-            JOptionPane.showMessageDialog(null, "Connection Lost! Reconnecting...");
+            JOptionPane.showMessageDialog(null, "Please Contact Your Service Provider");
             conn = SQLite.getInstance();
 
         }
