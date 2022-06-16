@@ -29,6 +29,7 @@ public class HomeScreen extends JFrame
     ExpenseTracker et;
     static int iCurrentXPosition = 0;
     static int iCurrentYPosition = 0;
+    int iCurrent = 0;
 
     public HomeScreen()
     {
@@ -74,6 +75,11 @@ public class HomeScreen extends JFrame
         HeadPanel.add(lblProjectTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 290, 30));
 
         btnMode.setContentAreaFilled(false);
+        btnMode.addActionListener((java.awt.event.ActionEvent evt)
+                ->
+        {
+            btnModeActionPerformed(evt);
+                });
         HeadPanel.add(btnMode, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 30, 30));
 
         btnMinimize.setFont(new java.awt.Font("Tahoma", 1, 18));
@@ -285,6 +291,26 @@ public class HomeScreen extends JFrame
 
     }
 
+    private void btnModeActionPerformed(java.awt.event.ActionEvent evt)
+    {
+
+        switch (iCurrent)
+        {
+
+            case 0:
+                onNightMode();
+                iCurrent = 1;
+                break;
+
+            case 1:
+                onDayMode();
+                iCurrent = 0;
+                break;
+
+        }
+
+    }
+
     public static void main(String args[])
     {
 
@@ -334,6 +360,26 @@ public class HomeScreen extends JFrame
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(et.getString("logo"))));
         lblHead.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("head"))));
+
+    }
+
+    public void onDayMode()
+    {
+
+        BodyPanel.setBackground(new java.awt.Color(240, 240, 240));
+        btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("moon"))));
+        btnNext.setForeground(new java.awt.Color(240, 240, 240));
+        btnPrevious.setForeground(new java.awt.Color(240, 240, 240));
+
+    }
+
+    public void onNightMode()
+    {
+
+        BodyPanel.setBackground(new java.awt.Color(41, 41, 41));
+        btnMode.setIcon(new javax.swing.ImageIcon(getClass().getResource(et.getString("sun"))));
+        btnNext.setForeground(new java.awt.Color(130, 130, 130));
+        btnPrevious.setForeground(new java.awt.Color(130, 130, 130));
 
     }
 

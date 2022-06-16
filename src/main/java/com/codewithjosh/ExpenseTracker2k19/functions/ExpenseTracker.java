@@ -32,6 +32,9 @@ public class ExpenseTracker
             case "logo":
                 return sResources.replace("%", "logo");
 
+            case "moon":
+                return sResources.replace("%", "moon");
+
             case "navlogin":
                 return sResources.replace("%", "nav_login");
 
@@ -58,6 +61,9 @@ public class ExpenseTracker
 
             case "registerhover":
                 return sResources.replace("%", "register_hover");
+
+            case "sun":
+                return sResources.replace("%", "sun");
 
             case "taillogin":
                 return sResources.replace("%", "tail_login");
