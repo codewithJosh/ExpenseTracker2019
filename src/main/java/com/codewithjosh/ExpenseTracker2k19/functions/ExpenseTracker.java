@@ -11,6 +11,30 @@ public class ExpenseTracker
         switch (stringOf.toLowerCase())
         {
 
+            case "background01":
+                return sResources.replace("%", "background_01");
+
+            case "background02":
+                return sResources.replace("%", "background_02");
+
+            case "background03":
+                return sResources.replace("%", "background_03");
+
+            case "background04":
+                return sResources.replace("%", "background_04");
+
+            case "budget":
+                return sResources.replace("%", "budget");
+
+            case "budgethover":
+                return sResources.replace("%", "budget_hover");
+
+            case "center":
+                return sResources.replace("%", "center");
+
+            case "centerhover":
+                return sResources.replace("%", "center_hover");
+
             case "day":
                 return sResources.replace("%", "day");
 
@@ -20,8 +44,26 @@ public class ExpenseTracker
             case "daylogo":
                 return sResources.replace("%", "day_logo");
 
+            case "end":
+                return sResources.replace("%", "end");
+
+            case "endhover":
+                return sResources.replace("%", "end_hover");
+
+            case "expenses":
+                return sResources.replace("%", "expenses");
+
+            case "expenseshover":
+                return sResources.replace("%", "expenses_hover");
+
             case "head":
                 return sResources.replace("%", "head");
+
+            case "income":
+                return sResources.replace("%", "income");
+
+            case "incomehover":
+                return sResources.replace("%", "income_hover");
 
             case "login":
                 return sResources.replace("%", "login");
@@ -61,6 +103,12 @@ public class ExpenseTracker
 
             case "registerhover":
                 return sResources.replace("%", "register_hover");
+
+            case "start":
+                return sResources.replace("%", "start");
+
+            case "starthover":
+                return sResources.replace("%", "start_hover");
 
             case "sun":
                 return sResources.replace("%", "sun");
