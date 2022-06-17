@@ -600,7 +600,7 @@ public class HomeScreen extends JFrame
 
     }
 
-    public void onDayMode()
+    private void onDayMode()
     {
 
         BodyPanel.setBackground(new Color(240, 240, 240));
@@ -610,7 +610,7 @@ public class HomeScreen extends JFrame
 
     }
 
-    public void onNightMode()
+    private void onNightMode()
     {
 
         BodyPanel.setBackground(new Color(41, 41, 41));

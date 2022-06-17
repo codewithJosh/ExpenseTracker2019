@@ -791,7 +791,7 @@ public class MainScreen extends JFrame
 
     }
 
-    public void onDayMode(boolean isInitial)
+    private void onDayMode(boolean isInitial)
     {
 
         final String username = tfUsername.getText().toLowerCase().trim();
@@ -825,7 +825,7 @@ public class MainScreen extends JFrame
 
     }
 
-    public void onNightMode(boolean isInitial)
+    private void onNightMode(boolean isInitial)
     {
 
         final String username = tfUsername.getText().toLowerCase().trim();
