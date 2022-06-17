@@ -4,6 +4,7 @@ import com.toedter.calendar.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.logging.*;
+import java.util.prefs.Preferences;
 import javax.swing.*;
 import main.java.com.codewithjosh.ExpenseTracker2k19.functions.ExpenseTracker;
 import org.netbeans.lib.awtextra.*;
@@ -12,10 +13,10 @@ public class ExpensesScreen extends JFrame
 {
 
     private JPanel BodyPanel;
-    private JPanel PanelTopLeft;
-    private JPanel PanelTopRight;
-    private JPanel PanelBottomLeft;
-    private JPanel PanelBottomRight;
+    private JPanel pTopLeft;
+    private JPanel pTopRight;
+    private JPanel pBottomLeft;
+    private JPanel pBottomRight;
     private JPanel DataPanel;
     private JPanel HeadPanel;
     private JPanel TablePanel;
@@ -70,6 +71,8 @@ public class ExpensesScreen extends JFrame
     ExpenseTracker expenseTracker;
     static int currentXPosition = 0;
     static int currentYPosition = 0;
+    int current = 0;
+    Preferences pref;
 
     public ExpensesScreen()
     {
@@ -111,16 +114,16 @@ public class ExpensesScreen extends JFrame
         chkTopRight = new JCheckBox();
         chkBottomLeft = new JCheckBox();
         chkBottomRight = new JCheckBox();
-        PanelTopLeft = new JPanel();
+        pTopLeft = new JPanel();
         lblTopLeft = new JLabel();
         lblTopLeftAmount = new JLabel();
-        PanelTopRight = new JPanel();
+        pTopRight = new JPanel();
         lblTopRight = new JLabel();
         lblTopRightAmount = new JLabel();
-        PanelBottomLeft = new JPanel();
+        pBottomLeft = new JPanel();
         lblBottomLeft = new JLabel();
         lblBottomLeftAmount = new JLabel();
-        PanelBottomRight = new JPanel();
+        pBottomRight = new JPanel();
         lblBottomRight = new JLabel();
         lblBottomRightAmount = new JLabel();
         spBottomRight = new JScrollPane();
@@ -157,6 +160,11 @@ public class ExpensesScreen extends JFrame
         HeadPanel.add(lblProjectTitle, new AbsoluteConstraints(40, 0, 290, 30));
 
         btnMode.setContentAreaFilled(false);
+        btnMode.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnModeActionPerformed(evt);
+                });
         HeadPanel.add(btnMode, new AbsoluteConstraints(0, 0, 30, 30));
 
         btnMinimize.setContentAreaFilled(false);
@@ -312,53 +320,53 @@ public class ExpensesScreen extends JFrame
 
         TablePanel.add(chkBottomRight, new AbsoluteConstraints(680, 170, -1, -1));
 
-        PanelTopLeft.setLayout(new AbsoluteLayout());
+        pTopLeft.setLayout(new AbsoluteLayout());
 
         lblTopLeft.setFont(new Font("Tahoma", 1, 12));
-        PanelTopLeft.add(lblTopLeft, new AbsoluteConstraints(20, 0, -1, 16));
+        pTopLeft.add(lblTopLeft, new AbsoluteConstraints(20, 0, -1, 16));
 
         lblTopLeftAmount.setFont(new Font("Tahoma", 1, 12));
         lblTopLeftAmount.setHorizontalAlignment(SwingConstants.RIGHT);
         lblTopLeftAmount.setText("0.00");
-        PanelTopLeft.add(lblTopLeftAmount, new AbsoluteConstraints(150, 0, 120, -1));
+        pTopLeft.add(lblTopLeftAmount, new AbsoluteConstraints(150, 0, 120, -1));
 
-        TablePanel.add(PanelTopLeft, new AbsoluteConstraints(30, 4, 290, 16));
+        TablePanel.add(pTopLeft, new AbsoluteConstraints(30, 4, 290, 16));
 
-        PanelTopRight.setLayout(new AbsoluteLayout());
+        pTopRight.setLayout(new AbsoluteLayout());
 
         lblTopRight.setFont(new Font("Tahoma", 1, 12));
-        PanelTopRight.add(lblTopRight, new AbsoluteConstraints(20, 0, -1, 16));
+        pTopRight.add(lblTopRight, new AbsoluteConstraints(20, 0, -1, 16));
 
         lblTopRightAmount.setFont(new Font("Tahoma", 1, 12));
         lblTopRightAmount.setHorizontalAlignment(SwingConstants.RIGHT);
         lblTopRightAmount.setText("0.00");
-        PanelTopRight.add(lblTopRightAmount, new AbsoluteConstraints(150, 0, 120, -1));
+        pTopRight.add(lblTopRightAmount, new AbsoluteConstraints(150, 0, 120, -1));
 
-        TablePanel.add(PanelTopRight, new AbsoluteConstraints(390, 4, 290, -1));
+        TablePanel.add(pTopRight, new AbsoluteConstraints(390, 4, 290, -1));
 
-        PanelBottomLeft.setLayout(new AbsoluteLayout());
+        pBottomLeft.setLayout(new AbsoluteLayout());
 
         lblBottomLeft.setFont(new Font("Tahoma", 1, 12));
-        PanelBottomLeft.add(lblBottomLeft, new AbsoluteConstraints(20, 0, -1, 16));
+        pBottomLeft.add(lblBottomLeft, new AbsoluteConstraints(20, 0, -1, 16));
 
         lblBottomLeftAmount.setFont(new Font("Tahoma", 1, 12));
         lblBottomLeftAmount.setHorizontalAlignment(SwingConstants.RIGHT);
         lblBottomLeftAmount.setText("0.00");
-        PanelBottomLeft.add(lblBottomLeftAmount, new AbsoluteConstraints(150, 0, 120, -1));
+        pBottomLeft.add(lblBottomLeftAmount, new AbsoluteConstraints(150, 0, 120, -1));
 
-        TablePanel.add(PanelBottomLeft, new AbsoluteConstraints(30, 174, 290, -1));
+        TablePanel.add(pBottomLeft, new AbsoluteConstraints(30, 174, 290, -1));
 
-        PanelBottomRight.setLayout(new AbsoluteLayout());
+        pBottomRight.setLayout(new AbsoluteLayout());
 
         lblBottomRight.setFont(new Font("Tahoma", 1, 12));
-        PanelBottomRight.add(lblBottomRight, new AbsoluteConstraints(20, 0, -1, 16));
+        pBottomRight.add(lblBottomRight, new AbsoluteConstraints(20, 0, -1, 16));
 
         lblBottomRightAmount.setFont(new Font("Tahoma", 1, 12));
         lblBottomRightAmount.setHorizontalAlignment(SwingConstants.RIGHT);
         lblBottomRightAmount.setText("0.00");
-        PanelBottomRight.add(lblBottomRightAmount, new AbsoluteConstraints(150, 0, 120, -1));
+        pBottomRight.add(lblBottomRightAmount, new AbsoluteConstraints(150, 0, 120, -1));
 
-        TablePanel.add(PanelBottomRight, new AbsoluteConstraints(390, 174, 290, -1));
+        TablePanel.add(pBottomRight, new AbsoluteConstraints(390, 174, 290, -1));
 
         tblTopLeft = new JTable()
         {
@@ -553,6 +561,28 @@ public class ExpensesScreen extends JFrame
 
     }
 
+    private void btnModeActionPerformed(ActionEvent evt)
+    {
+
+        switch (current)
+        {
+
+            case 0:
+                onNightMode();
+                current = 1;
+                break;
+
+            case 1:
+                onDayMode();
+                current = 0;
+                break;
+
+        }
+
+        pref.putInt("current", current);
+
+    }
+
     public static void main(String args[])
     {
 
@@ -594,6 +624,7 @@ public class ExpensesScreen extends JFrame
     {
 
         expenseTracker = new ExpenseTracker();
+        pref = Preferences.userNodeForPackage(Class.class);
 
     }
 
@@ -602,6 +633,119 @@ public class ExpensesScreen extends JFrame
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(expenseTracker.getString("logo"))));
         lblHead.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("head"))));
+
+        switch (current)
+        {
+
+            case 0:
+                onDayMode();
+                break;
+
+            case 1:
+                onNightMode();
+                break;
+
+        }
+
+    }
+
+    private void onDayMode()
+    {
+
+        BodyPanel.setBackground(new Color(240, 240, 240));
+        TablePanel.setBackground(new Color(240, 240, 240));
+        DataPanel.setBackground(new Color(225, 225, 225));
+
+        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("moon"))));
+        btnBack.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("dayback"))));
+        btnCalculator.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("daycalculator"))));
+        btnClear.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("dayclear"))));
+        btnAdd.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("dayadd"))));
+
+        lblTitle.setForeground(new Color(0, 0, 0));
+        lblCategory.setForeground(new Color(0, 0, 0));
+        lblQuantity.setForeground(new Color(0, 0, 0));
+        lblAmount.setForeground(new Color(0, 0, 0));
+        lblDescription.setForeground(new Color(0, 0, 0));
+        lblDate.setForeground(new Color(0, 0, 0));
+        lblBalance.setForeground(new Color(0, 0, 0));
+        lblTotal.setForeground(new Color(0, 0, 0));
+
+        btnGraph.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("daygraph"))));
+        btnDelete.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("daydelete"))));
+        btnDeleteAll.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("daydeleteall"))));
+        btnToday.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("daytoday"))));
+        chkTopLeft.setBackground(new Color(240, 240, 240));
+        chkTopRight.setBackground(new Color(240, 240, 240));
+        chkBottomLeft.setBackground(new Color(240, 240, 240));
+        chkBottomRight.setBackground(new Color(240, 240, 240));
+
+        pTopLeft.setBackground(new Color(50, 166, 248));
+        pTopRight.setBackground(new Color(50, 166, 248));
+        pBottomLeft.setBackground(new Color(50, 166, 248));
+        pBottomRight.setBackground(new Color(50, 166, 248));
+        lblTopLeft.setForeground(new Color(0, 0, 0));
+        lblTopLeftAmount.setForeground(new Color(0, 0, 0));
+        lblTopRight.setForeground(new Color(0, 0, 0));
+        lblTopRightAmount.setForeground(new Color(0, 0, 0));
+        lblBottomLeft.setForeground(new Color(0, 0, 0));
+        lblBottomLeftAmount.setForeground(new Color(0, 0, 0));
+        lblBottomRight.setForeground(new Color(0, 0, 0));
+        lblBottomRightAmount.setForeground(new Color(0, 0, 0));
+
+        tfQuantity.setBackground(new Color(225, 225, 225));
+        tfAmount.setBackground(new Color(225, 225, 225));
+        tfDescription.setBackground(new Color(225, 225, 225));
+
+    }
+
+    private void onNightMode()
+    {
+
+        BodyPanel.setBackground(new Color(41, 41, 41));
+        TablePanel.setBackground(new Color(41, 41, 41));
+        DataPanel.setBackground(new Color(62, 62, 62));
+
+        lblTitle.setForeground(new Color(51, 153, 255));
+        lblCategory.setForeground(new Color(204, 204, 204));
+        lblQuantity.setForeground(new Color(204, 204, 204));
+        lblAmount.setForeground(new Color(204, 204, 204));
+        lblDescription.setForeground(new Color(204, 204, 204));
+        lblDate.setForeground(new Color(204, 204, 204));
+        lblBalance.setForeground(new Color(204, 204, 204));
+        lblTotal.setForeground(new Color(204, 204, 204));
+
+        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("sun"))));
+        btnBack.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nightback"))));
+        btnCalculator.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nightcalculator"))));
+        btnClear.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nightclear"))));
+        btnAdd.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nightadd"))));
+
+        btnGraph.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nightgraph"))));
+        btnDelete.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nightdelete"))));
+        btnDeleteAll.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nightdeleteall"))));
+        btnToday.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nighttoday"))));
+        chkBottomRight.setBackground(new Color(41, 41, 41));
+        chkTopLeft.setBackground(new Color(41, 41, 41));
+        chkTopRight.setBackground(new Color(41, 41, 41));
+        chkBottomLeft.setBackground(new Color(41, 41, 41));
+
+        pTopLeft.setBackground(new Color(39, 71, 217));
+        pTopRight.setBackground(new Color(39, 71, 217));
+        pBottomLeft.setBackground(new Color(39, 71, 217));
+        pBottomRight.setBackground(new Color(39, 71, 217));
+        lblTopLeft.setForeground(new Color(204, 204, 204));
+        lblTopLeftAmount.setForeground(new Color(204, 204, 204));
+        lblTopRightAmount.setForeground(new Color(204, 204, 204));
+        lblTopRight.setForeground(new Color(204, 204, 204));
+        lblBottomLeftAmount.setForeground(new Color(204, 204, 204));
+        lblBottomLeft.setForeground(new Color(204, 204, 204));
+        lblBottomRightAmount.setForeground(new Color(204, 204, 204));
+        lblBottomRight.setForeground(new Color(204, 204, 204));
+
+        tfQuantity.setBackground(new Color(62, 62, 62));
+        tfAmount.setBackground(new Color(62, 62, 62));
+        tfDescription.setBackground(new Color(62, 62, 62));
 
     }
 
