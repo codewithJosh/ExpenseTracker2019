@@ -3,9 +3,11 @@ package main.java.com.codewithjosh.ExpenseTracker2k19;
 import com.toedter.calendar.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import main.java.com.codewithjosh.ExpenseTracker2k19.functions.ExpenseTracker;
 import org.netbeans.lib.awtextra.*;
 
@@ -73,6 +75,10 @@ public class ExpensesScreen extends JFrame
     static int currentYPosition = 0;
     int current = 0;
     Preferences pref;
+    DefaultTableModel modelTopLeft = new DefaultTableModel();
+    DefaultTableModel modelTopRight = new DefaultTableModel();
+    DefaultTableModel modelBottomLeft = new DefaultTableModel();
+    DefaultTableModel modelBottomRight = new DefaultTableModel();
 
     public ExpensesScreen()
     {
@@ -80,6 +86,7 @@ public class ExpensesScreen extends JFrame
         initComponents();
         initInstances();
         initIcons();
+        initTable();
 
     }
 
@@ -293,6 +300,11 @@ public class ExpensesScreen extends JFrame
         DataPanel.add(s, new AbsoluteConstraints(50, 120, 740, 10));
 
         btnBack.setContentAreaFilled(false);
+        btnBack.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnBackActionPerformed(evt);
+                });
         DataPanel.add(btnBack, new AbsoluteConstraints(20, 20, -1, -1));
 
         btnAdd.setContentAreaFilled(false);
@@ -302,6 +314,11 @@ public class ExpensesScreen extends JFrame
         DataPanel.add(btnClear, new AbsoluteConstraints(710, 80, 80, 30));
 
         btnCalculator.setContentAreaFilled(false);
+        btnCalculator.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnCalculatorActionPerformed(evt);
+                });
         DataPanel.add(btnCalculator, new AbsoluteConstraints(770, 30, -1, -1));
 
         BodyPanel.add(DataPanel, new AbsoluteConstraints(0, 0, 850, 149));
@@ -583,6 +600,34 @@ public class ExpensesScreen extends JFrame
 
     }
 
+    private void btnBackActionPerformed(ActionEvent evt)
+    {
+
+        dispose();
+
+        final HomeScreen homeScreen = new HomeScreen();
+        homeScreen.setVisible(true);
+
+    }
+
+    private void btnCalculatorActionPerformed(ActionEvent evt)
+    {
+
+        try
+        {
+
+            Runtime.getRuntime().exec("calc");
+
+        }
+        catch (IOException ex)
+        {
+
+            Logger.getLogger(ExpensesScreen.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+
+    }
+
     public static void main(String args[])
     {
 
@@ -625,6 +670,7 @@ public class ExpensesScreen extends JFrame
 
         expenseTracker = new ExpenseTracker();
         pref = Preferences.userNodeForPackage(Class.class);
+        current = pref.getInt("current", 0);
 
     }
 
@@ -646,6 +692,53 @@ public class ExpensesScreen extends JFrame
                 break;
 
         }
+
+    }
+
+    private void initTable()
+    {
+
+        lblTopLeft.setText(cmbCategory.getItemAt(1));
+        lblTopRight.setText(cmbCategory.getItemAt(2));
+        lblBottomLeft.setText(cmbCategory.getItemAt(3));
+        lblBottomRight.setText(cmbCategory.getItemAt(4));
+
+        final Object col[] =
+        {
+            "ID",
+            "QTY",
+            "AMOUNT",
+            "DESCRIPTION"
+        };
+
+        modelTopLeft.setColumnIdentifiers(col);
+        modelTopRight.setColumnIdentifiers(col);
+        modelBottomLeft.setColumnIdentifiers(col);
+        modelBottomRight.setColumnIdentifiers(col);
+
+        tblTopLeft.setModel(modelTopLeft);
+        tblTopLeft.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tblTopLeft.getColumnModel().getColumn(1).setPreferredWidth(30);
+        tblTopLeft.getColumnModel().getColumn(2).setPreferredWidth(60);
+        tblTopLeft.getColumnModel().getColumn(3).setPreferredWidth(140);
+
+        tblTopRight.setModel(modelTopRight);
+        tblTopRight.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tblTopRight.getColumnModel().getColumn(1).setPreferredWidth(30);
+        tblTopRight.getColumnModel().getColumn(2).setPreferredWidth(60);
+        tblTopRight.getColumnModel().getColumn(3).setPreferredWidth(140);
+
+        tblBottomLeft.setModel(modelBottomLeft);
+        tblBottomLeft.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tblBottomLeft.getColumnModel().getColumn(1).setPreferredWidth(30);
+        tblBottomLeft.getColumnModel().getColumn(2).setPreferredWidth(60);
+        tblBottomLeft.getColumnModel().getColumn(3).setPreferredWidth(140);
+
+        tblBottomRight.setModel(modelBottomRight);
+        tblBottomRight.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tblBottomRight.getColumnModel().getColumn(1).setPreferredWidth(30);
+        tblBottomRight.getColumnModel().getColumn(2).setPreferredWidth(60);
+        tblBottomRight.getColumnModel().getColumn(3).setPreferredWidth(140);
 
     }
 

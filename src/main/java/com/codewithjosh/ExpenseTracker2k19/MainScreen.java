@@ -521,7 +521,7 @@ public class MainScreen extends JFrame
     private void tfUsernameFocusLost(FocusEvent evt)
     {
 
-        tfUsername.setHorizontalAlignment(JTextField.LEFT);
+        tfUsername.setHorizontalAlignment(JTextField.LEADING);
 
         final String username = tfUsername.getText().toLowerCase().trim();
 
@@ -567,7 +567,7 @@ public class MainScreen extends JFrame
     private void pfPasswordFocusLost(FocusEvent evt)
     {
 
-        pfPassword.setHorizontalAlignment(JTextField.LEFT);
+        pfPassword.setHorizontalAlignment(JTextField.LEADING);
 
         String password = pfPassword.getText().trim();
 
@@ -724,6 +724,7 @@ public class MainScreen extends JFrame
         expenseTracker = new ExpenseTracker();
         conn = SQLite.getInstance();
         pref = Preferences.userNodeForPackage(Class.class);
+        current = pref.getInt("current", 0);
 
     }
 
@@ -739,8 +740,6 @@ public class MainScreen extends JFrame
         lblUsername.grabFocus();
         tfUsername.setText("Enter your Username");
         pfPassword.setText("******");
-
-        current = pref.getInt("current", 0);
 
         switch (current)
         {

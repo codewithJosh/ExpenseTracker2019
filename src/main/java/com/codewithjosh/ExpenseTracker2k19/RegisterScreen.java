@@ -544,7 +544,7 @@ public class RegisterScreen extends JFrame
     private void tfUsernameFocusLost(FocusEvent evt)
     {
 
-        tfUsername.setHorizontalAlignment(JTextField.LEFT);
+        tfUsername.setHorizontalAlignment(JTextField.LEADING);
 
         final String username = tfUsername.getText().toLowerCase().trim();
 
@@ -590,7 +590,7 @@ public class RegisterScreen extends JFrame
     private void pfPasswordFocusLost(FocusEvent evt)
     {
 
-        pfPassword.setHorizontalAlignment(JTextField.LEFT);
+        pfPassword.setHorizontalAlignment(JTextField.LEADING);
 
         String password = pfPassword.getText().trim();
 
@@ -636,7 +636,7 @@ public class RegisterScreen extends JFrame
     private void pfRePasswordFocusLost(FocusEvent evt)
     {
 
-        pfRePassword.setHorizontalAlignment(JTextField.LEFT);
+        pfRePassword.setHorizontalAlignment(JTextField.LEADING);
 
         String repassword = pfRePassword.getText().trim();
 
@@ -819,6 +819,7 @@ public class RegisterScreen extends JFrame
         expenseTracker = new ExpenseTracker();
         conn = SQLite.getInstance();
         pref = Preferences.userNodeForPackage(Class.class);
+        current = pref.getInt("current", 0);
 
     }
 
@@ -835,8 +836,6 @@ public class RegisterScreen extends JFrame
         tfUsername.setText("Enter your Username");
         pfPassword.setText("******");
         pfRePassword.setText("******");
-
-        current = pref.getInt("current", 0);
 
         switch (current)
         {

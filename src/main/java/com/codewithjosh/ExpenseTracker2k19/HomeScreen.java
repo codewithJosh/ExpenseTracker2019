@@ -510,6 +510,7 @@ public class HomeScreen extends JFrame
     {
 
         dispose();
+        pref.putInt("position", position);
 
         switch (position)
         {
@@ -575,6 +576,8 @@ public class HomeScreen extends JFrame
 
         expenseTracker = new ExpenseTracker();
         pref = Preferences.userNodeForPackage(Class.class);
+        current = pref.getInt("current", 0);
+        position = pref.getInt("position", 0);
 
     }
 
@@ -583,7 +586,27 @@ public class HomeScreen extends JFrame
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(expenseTracker.getString("logo"))));
         lblHead.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("head"))));
-        onIntroduction();
+
+        switch (position)
+        {
+
+            case 0:
+                onIntroduction();
+                break;
+
+            case 1:
+                onIncome();
+                break;
+
+            case 2:
+                onBudget();
+                break;
+
+            case 3:
+                onExpenses();
+                break;
+
+        }
 
         switch (current)
         {
