@@ -4,6 +4,7 @@ import com.toedter.calendar.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
 import javax.swing.*;
@@ -87,6 +88,9 @@ public class ExpensesScreen extends JFrame
         initInstances();
         initIcons();
         initTable();
+
+        onToday();
+        onClear();
 
     }
 
@@ -300,6 +304,7 @@ public class ExpensesScreen extends JFrame
         DataPanel.add(s, new AbsoluteConstraints(50, 120, 740, 10));
 
         btnBack.setContentAreaFilled(false);
+        btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnBack.addActionListener((ActionEvent evt)
                 ->
         {
@@ -308,12 +313,20 @@ public class ExpensesScreen extends JFrame
         DataPanel.add(btnBack, new AbsoluteConstraints(20, 20, -1, -1));
 
         btnAdd.setContentAreaFilled(false);
+        btnAdd.setCursor(new Cursor(Cursor.HAND_CURSOR));
         DataPanel.add(btnAdd, new AbsoluteConstraints(670, 80, 30, 30));
 
         btnClear.setContentAreaFilled(false);
+        btnClear.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnClear.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnClearActionPerformed(evt);
+                });
         DataPanel.add(btnClear, new AbsoluteConstraints(710, 80, 80, 30));
 
         btnCalculator.setContentAreaFilled(false);
+        btnCalculator.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCalculator.addActionListener((ActionEvent evt)
                 ->
         {
@@ -468,15 +481,24 @@ public class ExpensesScreen extends JFrame
         BodyPanel.add(TablePanel, new AbsoluteConstraints(60, 210, 740, 330));
 
         btnGraph.setContentAreaFilled(false);
+        btnGraph.setCursor(new Cursor(Cursor.HAND_CURSOR));
         BodyPanel.add(btnGraph, new AbsoluteConstraints(90, 560, -1, -1));
 
         btnDelete.setContentAreaFilled(false);
+        btnDelete.setCursor(new Cursor(Cursor.HAND_CURSOR));
         BodyPanel.add(btnDelete, new AbsoluteConstraints(290, 560, -1, -1));
 
         btnToday.setContentAreaFilled(false);
+        btnToday.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnToday.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnTodayActionPerformed(evt);
+                });
         BodyPanel.add(btnToday, new AbsoluteConstraints(270, 160, 80, 30));
 
         btnDeleteAll.setContentAreaFilled(false);
+        btnDeleteAll.setCursor(new Cursor(Cursor.HAND_CURSOR));
         BodyPanel.add(btnDeleteAll, new AbsoluteConstraints(390, 560, -1, -1));
 
         lblDate.setFont(new Font("Arial", 1, 14));
@@ -625,6 +647,20 @@ public class ExpensesScreen extends JFrame
             Logger.getLogger(ExpensesScreen.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+
+    }
+
+    private void btnTodayActionPerformed(ActionEvent evt)
+    {
+
+        onToday();
+
+    }
+
+    private void btnClearActionPerformed(ActionEvent evt)
+    {
+
+        onClear();
 
     }
 
@@ -839,6 +875,36 @@ public class ExpensesScreen extends JFrame
         tfQuantity.setBackground(new Color(62, 62, 62));
         tfAmount.setBackground(new Color(62, 62, 62));
         tfDescription.setBackground(new Color(62, 62, 62));
+
+    }
+
+    private void onToday()
+    {
+
+        final long millis = System.currentTimeMillis();
+
+        Date date = new Date(millis);
+        dcDate.setDate(date);
+
+    }
+
+    private void onClear()
+    {
+
+        cmbCategory.grabFocus();
+        tfQuantity.setText("1");
+        tfQuantity.setHorizontalAlignment(JTextField.TRAILING);
+        tfAmount.setText("0.00");
+        tfAmount.setHorizontalAlignment(JTextField.TRAILING);
+        tfDescription.setText("What's expense did you make? (Optional)");
+        tfDescription.setHorizontalAlignment(JTextField.LEADING);
+
+        tfQuantity.setForeground(Color.GRAY);
+        tfQuantity.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        tfAmount.setForeground(Color.GRAY);
+        tfAmount.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        tfDescription.setForeground(Color.GRAY);
+        tfDescription.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
     }
 
