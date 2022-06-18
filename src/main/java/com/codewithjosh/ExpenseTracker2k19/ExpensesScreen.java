@@ -85,6 +85,7 @@ public class ExpensesScreen extends JFrame
     Connection conn = null;
     PreparedStatement ps = null;
     int user_id = 0;
+    ResultSet rs = null;
 
     public ExpensesScreen()
     {
@@ -96,6 +97,8 @@ public class ExpensesScreen extends JFrame
 
         onToday();
         onClear();
+        loadExpenses();
+        setSelected(true);
 
     }
 
@@ -456,12 +459,32 @@ public class ExpensesScreen extends JFrame
 
         TablePanel.setLayout(new AbsoluteLayout());
 
+        chkTopLeft.addItemListener((ItemEvent evt)
+                ->
+        {
+            chkTopLeftItemStateChanged(evt);
+                });
         TablePanel.add(chkTopLeft, new AbsoluteConstraints(320, 0, -1, -1));
 
+        chkTopRight.addItemListener((ItemEvent evt)
+                ->
+        {
+            chkTopRightItemStateChanged(evt);
+                });
         TablePanel.add(chkTopRight, new AbsoluteConstraints(680, 0, -1, -1));
 
+        chkBottomLeft.addItemListener((ItemEvent evt)
+                ->
+        {
+            chkBottomLeftItemStateChanged(evt);
+                });
         TablePanel.add(chkBottomLeft, new AbsoluteConstraints(320, 170, -1, -1));
 
+        chkBottomRight.addItemListener((ItemEvent evt)
+                ->
+        {
+            chkBottomRightItemStateChanged(evt);
+                });
         TablePanel.add(chkBottomRight, new AbsoluteConstraints(680, 170, -1, -1));
 
         pTopLeft.setLayout(new AbsoluteLayout());
@@ -604,6 +627,16 @@ public class ExpensesScreen extends JFrame
 
         btnToday.setContentAreaFilled(false);
         btnToday.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnToday.addMouseListener(new MouseAdapter()
+        {
+
+            @Override
+            public void mouseEntered(MouseEvent evt)
+            {
+                btnTodayMouseEntered(evt);
+            }
+
+        });
         btnToday.addActionListener((ActionEvent evt)
                 ->
         {
@@ -764,10 +797,20 @@ public class ExpensesScreen extends JFrame
 
     }
 
+    private void btnTodayMouseEntered(MouseEvent evt)
+    {
+
+        setSelected(true);
+        loadExpenses();
+
+    }
+
     private void btnTodayActionPerformed(ActionEvent evt)
     {
 
+        cmbCategory.grabFocus();
         onToday();
+        loadExpenses();
 
     }
 
@@ -959,6 +1002,34 @@ public class ExpensesScreen extends JFrame
 
         else
             onAdd(category, quantity, amount, description);
+
+    }
+
+    private void chkTopLeftItemStateChanged(ItemEvent evt)
+    {
+
+        onSelected(chkTopLeft, lblTopLeftAmount, tblTopLeft);
+
+    }
+
+    private void chkTopRightItemStateChanged(ItemEvent evt)
+    {
+
+        onSelected(chkTopRight, lblTopRightAmount, tblTopRight);
+
+    }
+
+    private void chkBottomLeftItemStateChanged(ItemEvent evt)
+    {
+
+        onSelected(chkBottomLeft, lblBottomLeftAmount, tblBottomLeft);
+
+    }
+
+    private void chkBottomRightItemStateChanged(ItemEvent evt)
+    {
+
+        onSelected(chkBottomRight, lblBottomRightAmount, tblBottomRight);
 
     }
 
@@ -1232,6 +1303,7 @@ public class ExpensesScreen extends JFrame
             ps.close();
 
             onClear();
+            loadExpenses();
 
         }
         catch (HeadlessException
@@ -1242,6 +1314,115 @@ public class ExpensesScreen extends JFrame
             conn = SQLite.getInstance();
 
         }
+
+    }
+
+    private void loadExpenses()
+    {
+
+        final String sql = "SELECT * FROM Expenses WHERE user_id=? AND expense_date=?";
+        final SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final String date = SimpleDateFormat.format(dcDate.getDate());
+        final String topLeft = lblTopLeft.getText();
+        final String topRight = lblTopRight.getText();
+        final String bottomLeft = lblBottomLeft.getText();
+        final String bottomRight = lblBottomRight.getText();
+
+        modelTopLeft.setRowCount(0);
+        modelTopRight.setRowCount(0);
+        modelBottomLeft.setRowCount(0);
+        modelBottomRight.setRowCount(0);
+
+        try
+        {
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, user_id);
+            ps.setString(2, date);
+
+            rs = ps.executeQuery();
+            Object[] ColumnData = new Object[4];
+            while (rs.next())
+            {
+
+                ColumnData[0] = rs.getString("expense_id");
+                ColumnData[1] = rs.getString("expense_quantity");
+                ColumnData[2] = rs.getString("expense_amount");
+                ColumnData[3] = rs.getString("expense_description");
+
+                if (topLeft.equals(rs.getString("expense_category")))
+                    modelTopLeft.addRow(ColumnData);
+                else if (topRight.equals(rs.getString("expense_category")))
+                    modelTopRight.addRow(ColumnData);
+                else if (bottomLeft.equals(rs.getString("expense_category")))
+                    modelBottomLeft.addRow(ColumnData);
+                else if (bottomRight.equals(rs.getString("expense_category")))
+                    modelBottomRight.addRow(ColumnData);
+
+                onSelected(chkTopLeft, lblTopLeftAmount, tblTopLeft);
+                onSelected(chkTopRight, lblTopRightAmount, tblTopRight);
+                onSelected(chkBottomLeft, lblBottomLeftAmount, tblBottomLeft);
+                onSelected(chkBottomRight, lblBottomRightAmount, tblBottomRight);
+                getTotal();
+
+            }
+
+        }
+        catch (SQLException ex)
+        {
+
+            JOptionPane.showMessageDialog(null, "Please Contact Your Service Provider");
+            conn = SQLite.getInstance();
+
+        }
+
+    }
+
+    private void onSelected(final JCheckBox chk, final JLabel lblAmount, final JTable tbl)
+    {
+
+        if (chk.isSelected())
+        {
+
+            lblAmount.setText(expenseTracker.getSum(tbl));
+            tbl.setVisible(true);
+
+        }
+
+        else
+        {
+
+            lblAmount.setText("0.00");
+            tbl.setVisible(false);
+
+        }
+
+        getTotal();
+
+    }
+
+    private void getTotal()
+    {
+
+        final double topLeftAmount = Double.parseDouble(lblTopLeftAmount.getText());
+        final double topRightAmount = Double.parseDouble(lblTopRightAmount.getText());
+        final double bottomLeftAmount = Double.parseDouble(lblBottomLeftAmount.getText());
+        final double bottomRightAmount = Double.parseDouble(lblBottomRightAmount.getText());
+
+        lblTotal.setText(String.format("%.2f", topLeftAmount
+                                                       + topRightAmount
+                                                       + bottomLeftAmount
+                                                       + bottomRightAmount));
+
+    }
+
+    private void setSelected(final boolean isSelected)
+    {
+
+        chkTopLeft.setSelected(isSelected);
+        chkTopRight.setSelected(isSelected);
+        chkBottomLeft.setSelected(isSelected);
+        chkBottomRight.setSelected(isSelected);
 
     }
 

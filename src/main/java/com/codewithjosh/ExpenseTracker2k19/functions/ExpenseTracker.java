@@ -1,5 +1,7 @@
 package main.java.com.codewithjosh.ExpenseTracker2k19.functions;
 
+import javax.swing.JTable;
+
 public class ExpenseTracker
 {
 
@@ -173,6 +175,18 @@ public class ExpenseTracker
         }
 
         return null;
+
+    }
+
+    public String getSum(final JTable tbl)
+    {
+
+        double sum = 0;
+
+        for (int i = 0; i < tbl.getRowCount(); i++)
+            sum += Double.parseDouble(String.valueOf(tbl.getValueAt(i, 2)));
+
+        return String.format("%.2f", sum);
 
     }
 
