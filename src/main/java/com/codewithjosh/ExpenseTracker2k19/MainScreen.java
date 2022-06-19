@@ -720,7 +720,12 @@ public class MainScreen extends JFrame
                 ->
         {
 
-            new MainScreen().setVisible(true);
+            final Preferences pref = Preferences.userNodeForPackage(Class.class);
+            final int user_id = pref.getInt("user_id", 0);
+            if (user_id != 0)
+                new HomeScreen().setVisible(true);
+            else
+                new MainScreen().setVisible(true);
 
                 });
 
