@@ -12,6 +12,10 @@ import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import main.java.com.codewithjosh.ExpenseTracker2k19.functions.*;
+import org.jfree.chart.*;
+import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.chart.util.Rotation;
+import org.jfree.data.general.DefaultPieDataset;
 import org.netbeans.lib.awtextra.*;
 
 public class ExpensesScreen extends JFrame
@@ -619,6 +623,11 @@ public class ExpensesScreen extends JFrame
 
         btnGraph.setContentAreaFilled(false);
         btnGraph.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnGraph.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnGraphActionPerformed(evt);
+                });
         BodyPanel.add(btnGraph, new AbsoluteConstraints(90, 560, -1, -1));
 
         btnDelete.setContentAreaFilled(false);
@@ -1030,6 +1039,52 @@ public class ExpensesScreen extends JFrame
     {
 
         onSelected(chkBottomRight, lblBottomRightAmount, tblBottomRight);
+
+    }
+
+    private void btnGraphActionPerformed(ActionEvent evt)
+    {
+
+        final String topLeft = lblTopLeft.getText();
+        final String topRight = lblTopRight.getText();
+        final String bottomLeft = lblBottomLeft.getText();
+        final String bottomRight = lblBottomRight.getText();
+        final double topLeftAmount = Double.parseDouble(lblTopLeftAmount.getText());
+        final double topRightAmount = Double.parseDouble(lblTopRightAmount.getText());
+        final double bottomLeftAmount = Double.parseDouble(lblBottomLeftAmount.getText());
+        final double bottomRightAmount = Double.parseDouble(lblBottomRightAmount.getText());
+
+        final DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue(topLeft, topLeftAmount);
+        dataset.setValue(topRight, topRightAmount);
+        dataset.setValue(bottomLeft, bottomLeftAmount);
+        dataset.setValue(bottomRight, bottomRightAmount);
+
+        final JFreeChart chart = ChartFactory.createPieChart3D("Expense Pie Chart", dataset, true, true, false);
+        final PiePlot3D plot = (PiePlot3D) chart.getPlot();
+        plot.setStartAngle(90);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(1f);
+        final ChartFrame frame = new ChartFrame("Expense Tracker - Expenses", chart);
+        frame.setVisible(true);
+        frame.setSize(new Dimension(500, 300));
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(expenseTracker.getString("logo"))));
+        chart.getTitle().setPaint(new Color(50, 166, 248));
+
+        switch (current)
+        {
+
+            case 0:
+                chart.setBackgroundPaint(new Color(255, 255, 255));
+                break;
+
+            case 1:
+                chart.setBackgroundPaint(new Color(62, 62, 62));
+                break;
+
+        }
 
     }
 
