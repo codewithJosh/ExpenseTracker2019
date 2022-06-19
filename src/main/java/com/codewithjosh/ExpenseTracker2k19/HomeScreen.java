@@ -341,26 +341,21 @@ public class HomeScreen extends JFrame
     private void btnCloseActionPerformed(ActionEvent evt)
     {
 
-        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Log Out", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Confirm Log Out", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         switch (response)
         {
 
             case JOptionPane.YES_OPTION:
+                pref.putInt("user_id", 0);
                 dispose();
-                final MainScreen mainScreen = new MainScreen();
-                mainScreen.setVisible(true);
+                new MainScreen().setVisible(true);
                 break;
 
             case JOptionPane.NO_OPTION:
                 System.exit(0);
                 break;
 
-            case JOptionPane.CANCEL_OPTION:
-                break;
-
-            case JOptionPane.CLOSED_OPTION:
-                break;
         }
 
     }
@@ -516,18 +511,15 @@ public class HomeScreen extends JFrame
         {
 
             case 1:
-                final IncomeScreen incomeScreen = new IncomeScreen();
-                incomeScreen.setVisible(true);
+                new IncomeScreen().setVisible(true);
                 break;
 
             case 2:
-                final BudgetScreen budgetScreen = new BudgetScreen();
-                budgetScreen.setVisible(true);
+                new BudgetScreen().setVisible(true);
                 break;
 
             case 3:
-                final ExpensesScreen expensesScreen = new ExpensesScreen();
-                expensesScreen.setVisible(true);
+                new ExpensesScreen().setVisible(true);
                 break;
 
         }
