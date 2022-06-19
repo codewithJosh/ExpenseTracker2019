@@ -1,5 +1,7 @@
 package main.java.com.codewithjosh.ExpenseTracker2k19.functions;
 
+import javax.swing.JTable;
+
 public class ExpenseTracker
 {
 
@@ -38,11 +40,35 @@ public class ExpenseTracker
             case "day":
                 return sResources.replace("%", "day");
 
+            case "dayadd":
+                return sResources.replace("%", "day_add");
+
+            case "dayback":
+                return sResources.replace("%", "day_back");
+
+            case "daycalculator":
+                return sResources.replace("%", "day_calculator");
+
+            case "dayclear":
+                return sResources.replace("%", "day_clear");
+
+            case "daydelete":
+                return sResources.replace("%", "day_delete");
+
+            case "daydeleteall":
+                return sResources.replace("%", "day_delete_all");
+
+            case "daygraph":
+                return sResources.replace("%", "day_graph");
+
             case "dayhover":
                 return sResources.replace("%", "day_hover");
 
             case "daylogo":
                 return sResources.replace("%", "day_logo");
+
+            case "daytoday":
+                return sResources.replace("%", "day_today");
 
             case "end":
                 return sResources.replace("%", "end");
@@ -92,11 +118,35 @@ public class ExpenseTracker
             case "night":
                 return sResources.replace("%", "night");
 
+            case "nightadd":
+                return sResources.replace("%", "night_add");
+
+            case "nightback":
+                return sResources.replace("%", "night_back");
+
+            case "nightcalculator":
+                return sResources.replace("%", "night_calculator");
+
+            case "nightclear":
+                return sResources.replace("%", "night_clear");
+
+            case "nightdelete":
+                return sResources.replace("%", "night_delete");
+
+            case "nightdeleteall":
+                return sResources.replace("%", "night_delete_all");
+
+            case "nightgraph":
+                return sResources.replace("%", "night_graph");
+
             case "nighthover":
                 return sResources.replace("%", "night_hover");
 
             case "nightlogo":
                 return sResources.replace("%", "night_logo");
+
+            case "nighttoday":
+                return sResources.replace("%", "night_today");
 
             case "register":
                 return sResources.replace("%", "register");
@@ -125,6 +175,27 @@ public class ExpenseTracker
         }
 
         return null;
+
+    }
+
+    public String getSum(final JTable tbl)
+    {
+
+        double sum = 0;
+
+        for (int i = 0; i < tbl.getRowCount(); i++)
+            sum += Double.parseDouble(String.valueOf(tbl.getValueAt(i, 2)));
+
+        return String.format("%.2f", sum);
+
+    }
+
+    public String getCell(final JTable tbl)
+    {
+
+        final int row = tbl.getSelectedRow();
+        final String cell = String.valueOf(tbl.getModel().getValueAt(row, 0));
+        return cell;
 
     }
 
