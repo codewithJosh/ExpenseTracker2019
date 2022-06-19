@@ -394,7 +394,16 @@ public class MainScreen extends JFrame
     private void btnCloseActionPerformed(ActionEvent evt)
     {
 
-        System.exit(0);
+        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        switch (response)
+        {
+
+            case JOptionPane.YES_OPTION:
+                System.exit(0);
+                break;
+
+        }
 
     }
 
@@ -500,8 +509,7 @@ public class MainScreen extends JFrame
     {
 
         dispose();
-        final RegisterScreen registerScreen = new RegisterScreen();
-        registerScreen.setVisible(true);
+        new RegisterScreen().setVisible(true);
 
     }
 
@@ -619,7 +627,7 @@ public class MainScreen extends JFrame
                     || password.equals("******"))
         {
 
-            JOptionPane.showMessageDialog(null, "All fields are required!");
+            JOptionPane.showMessageDialog(this, "All fields are required!", "Log In", JOptionPane.WARNING_MESSAGE);
 
             if (username.equals("enter your username"))
                 switch (current)
@@ -657,7 +665,7 @@ public class MainScreen extends JFrame
         else if (password.length() < 6)
         {
 
-            JOptionPane.showMessageDialog(null, "Password Must be at least 6 characters!");
+            JOptionPane.showMessageDialog(this, "Password must be at least 6 characters!", "Log In", JOptionPane.WARNING_MESSAGE);
             pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 51, 51)));
             pfPassword.setForeground(new Color(255, 51, 51));
 
@@ -899,28 +907,25 @@ public class MainScreen extends JFrame
                     {
 
                         case 0:
-                            JOptionPane.showMessageDialog(null, "User Doesn't Exist!");
+                            JOptionPane.showMessageDialog(this, "User Doesn't Exist!", "Log In", JOptionPane.WARNING_MESSAGE);
                             tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 51, 51)));
                             tfUsername.setForeground(new Color(255, 51, 51));
                             break;
 
                         case 1:
-                            JOptionPane.showMessageDialog(null, "Incorrect Password!");
+                            JOptionPane.showMessageDialog(this, "Incorrect Password!", "Log In", JOptionPane.WARNING_MESSAGE);
                             break;
 
                     }
 
                     pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 51, 51)));
                     pfPassword.setForeground(new Color(255, 51, 51));
-
                     break;
 
                 case 1:
                     conn.close();
                     dispose();
-                    final HomeScreen homeScreen = new HomeScreen();
-                    homeScreen.setVisible(true);
-
+                    new HomeScreen().setVisible(true);
                     break;
 
             }
@@ -933,8 +938,7 @@ public class MainScreen extends JFrame
                | SQLException ex)
         {
 
-            JOptionPane.showMessageDialog(null, "Please Contact Your Service Provider");
-            conn = SQLite.getInstance();
+            JOptionPane.showMessageDialog(this, "An error occured while logging in", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
 
         }
 

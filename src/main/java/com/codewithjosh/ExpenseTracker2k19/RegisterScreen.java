@@ -417,7 +417,16 @@ public class RegisterScreen extends JFrame
     private void btnCloseActionPerformed(ActionEvent evt)
     {
 
-        System.exit(0);
+        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        switch (response)
+        {
+
+            case JOptionPane.YES_OPTION:
+                System.exit(0);
+                break;
+
+        }
 
     }
 
@@ -522,8 +531,7 @@ public class RegisterScreen extends JFrame
     {
 
         dispose();
-        final MainScreen MainScreen = new MainScreen();
-        MainScreen.setVisible(true);
+        new MainScreen().setVisible(true);
 
     }
 
@@ -704,7 +712,7 @@ public class RegisterScreen extends JFrame
                     || repassword.equals("******"))
         {
 
-            JOptionPane.showMessageDialog(null, "All fields are required!");
+            JOptionPane.showMessageDialog(this, "All fields are required!", "Sign Up", JOptionPane.WARNING_MESSAGE);
 
             if (username.equals("enter your username"))
                 switch (current)
@@ -756,7 +764,7 @@ public class RegisterScreen extends JFrame
         else if (password.length() < 6)
         {
 
-            JOptionPane.showMessageDialog(null, "Password Must be at least 6 characters!");
+            JOptionPane.showMessageDialog(this, "Password must be at least 6 characters!", "Sign Up", JOptionPane.WARNING_MESSAGE);
             pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 51, 51)));
             pfPassword.setForeground(new Color(255, 51, 51));
 
@@ -764,7 +772,7 @@ public class RegisterScreen extends JFrame
         else if (!password.equals(repassword))
         {
 
-            JOptionPane.showMessageDialog(null, "Password doesn't match!");
+            JOptionPane.showMessageDialog(this, "Password doesn't match!", "Sign Up", JOptionPane.WARNING_MESSAGE);
             pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 51, 51)));
             pfPassword.setForeground(new Color(255, 51, 51));
             pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 51, 51)));
@@ -998,17 +1006,15 @@ public class RegisterScreen extends JFrame
                     ps.setString(2, password);
 
                     ps.execute();
-                    JOptionPane.showMessageDialog(null, "You're Successfully Added!");
+                    JOptionPane.showMessageDialog(this, "You're Successfully Added!", "Sign Up", JOptionPane.INFORMATION_MESSAGE);
 
                     conn.close();
                     dispose();
-                    final MainScreen MainScreen = new MainScreen();
-                    MainScreen.setVisible(true);
-
+                    new MainScreen().setVisible(true);
                     break;
 
                 case 1:
-                    JOptionPane.showMessageDialog(null, "Username is Already Taken!");
+                    JOptionPane.showMessageDialog(this, "Username is Already Taken!", "Sign Up", JOptionPane.WARNING_MESSAGE);
                     tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 51, 51)));
                     tfUsername.setForeground(new Color(255, 51, 51));
                     break;
@@ -1023,8 +1029,7 @@ public class RegisterScreen extends JFrame
                | SQLException ex)
         {
 
-            JOptionPane.showMessageDialog(null, "Please Contact Your Service Provider");
-            conn = SQLite.getInstance();
+            JOptionPane.showMessageDialog(this, "An error occured while signing up", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
 
         }
 

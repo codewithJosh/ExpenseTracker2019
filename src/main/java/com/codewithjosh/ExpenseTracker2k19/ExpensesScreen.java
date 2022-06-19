@@ -732,8 +732,7 @@ public class ExpensesScreen extends JFrame
 
             case JOptionPane.YES_OPTION:
                 dispose();
-                final MainScreen mainScreen = new MainScreen();
-                mainScreen.setVisible(true);
+                new MainScreen().setVisible(true);
                 break;
 
             case JOptionPane.NO_OPTION:
@@ -789,9 +788,7 @@ public class ExpensesScreen extends JFrame
     {
 
         dispose();
-
-        final HomeScreen homeScreen = new HomeScreen();
-        homeScreen.setVisible(true);
+        new HomeScreen().setVisible(true);
 
     }
 
