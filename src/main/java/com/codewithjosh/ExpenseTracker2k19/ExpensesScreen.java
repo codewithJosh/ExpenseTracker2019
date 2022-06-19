@@ -732,6 +732,7 @@ public class ExpensesScreen extends JFrame
 
             case JOptionPane.YES_OPTION:
                 dispose();
+                pref.putInt("user_id", 0);
                 new MainScreen().setVisible(true);
                 break;
 

@@ -347,6 +347,7 @@ public class HomeScreen extends JFrame
         {
 
             case JOptionPane.YES_OPTION:
+                pref.putInt("user_id", 0);
                 dispose();
                 new MainScreen().setVisible(true);
                 break;
