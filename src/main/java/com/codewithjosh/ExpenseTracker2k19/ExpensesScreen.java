@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Date;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
@@ -90,6 +91,7 @@ public class ExpensesScreen extends JFrame
     PreparedStatement ps = null;
     int user_id = 0;
     ResultSet rs = null;
+    boolean isSelecting = false;
 
     public ExpensesScreen()
     {
@@ -632,6 +634,11 @@ public class ExpensesScreen extends JFrame
 
         btnDelete.setContentAreaFilled(false);
         btnDelete.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnDelete.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnDeleteActionPerformed(evt);
+                });
         BodyPanel.add(btnDelete, new AbsoluteConstraints(290, 560, -1, -1));
 
         btnToday.setContentAreaFilled(false);
@@ -655,6 +662,11 @@ public class ExpensesScreen extends JFrame
 
         btnDeleteAll.setContentAreaFilled(false);
         btnDeleteAll.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnDeleteAll.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnDeleteAllActionPerformed(evt);
+                });
         BodyPanel.add(btnDeleteAll, new AbsoluteConstraints(390, 560, -1, -1));
 
         lblDate.setFont(new Font("Arial", 1, 14));
@@ -713,7 +725,7 @@ public class ExpensesScreen extends JFrame
     private void btnCloseActionPerformed(ActionEvent evt)
     {
 
-        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Log Out", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Confirm Log Out", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         switch (response)
         {
@@ -728,11 +740,6 @@ public class ExpensesScreen extends JFrame
                 System.exit(0);
                 break;
 
-            case JOptionPane.CANCEL_OPTION:
-                break;
-
-            case JOptionPane.CLOSED_OPTION:
-                break;
         }
 
     }
@@ -1007,7 +1014,7 @@ public class ExpensesScreen extends JFrame
         if (category.equals("<Choose>")
                     || quantity == 0
                     || amount == 0)
-            JOptionPane.showMessageDialog(null, "All fields are required!");
+            JOptionPane.showMessageDialog(this, "All fields are required!", "Add", JOptionPane.WARNING_MESSAGE);
 
         else
             onAdd(category, quantity, amount, description);
@@ -1083,6 +1090,87 @@ public class ExpensesScreen extends JFrame
             case 1:
                 chart.setBackgroundPaint(new Color(62, 62, 62));
                 break;
+
+        }
+
+    }
+
+    private void btnDeleteActionPerformed(ActionEvent evt)
+    {
+
+        final ArrayList<String> expenses = new ArrayList<>();
+        if (tblTopLeft.getSelectedRowCount() == 1)
+            expenses.add(expenseTracker.getCell(tblTopLeft));
+        if (tblTopRight.getSelectedRowCount() == 1)
+            expenses.add(expenseTracker.getCell(tblTopRight));
+        if (tblBottomLeft.getSelectedRowCount() == 1)
+            expenses.add(expenseTracker.getCell(tblBottomLeft));
+        if (tblBottomRight.getSelectedRowCount() == 1)
+            expenses.add(expenseTracker.getCell(tblBottomRight));
+
+        if (!expenses.isEmpty())
+        {
+
+            final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the selected items?", "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            switch (response)
+            {
+
+                case JOptionPane.YES_OPTION:
+                    onDelete("expense_id", expenses);
+                    break;
+
+            }
+
+        }
+        else
+            JOptionPane.showMessageDialog(this, "No selected items!", "Delete", JOptionPane.WARNING_MESSAGE);
+
+    }
+
+    private void btnDeleteAllActionPerformed(ActionEvent evt)
+    {
+
+        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to permanently delete these selected boxes?", "Confirm Delete All", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (!isSelecting)
+        {
+
+            setSelected(true);
+
+            switch (response)
+            {
+
+                case JOptionPane.YES_OPTION:
+                    onDelete("expense_category", getCategories());
+                    break;
+
+                case JOptionPane.NO_OPTION:
+                    JOptionPane.showMessageDialog(this, "Please select the checkbox you want to be deleted", "Delete All", JOptionPane.INFORMATION_MESSAGE);
+                    setSelected(false);
+                    setComponentsEnabled(false);
+                    isSelecting = true;
+                    break;
+
+            }
+
+        }
+
+        else
+        {
+
+            switch (response)
+            {
+
+                case JOptionPane.YES_OPTION:
+                    onDelete("expense_category", getCategories());
+                    break;
+
+            }
+
+            setComponentsEnabled(true);
+            isSelecting = false;
+            setSelected(true);
 
         }
 
@@ -1365,8 +1453,7 @@ public class ExpensesScreen extends JFrame
                | SQLException ex)
         {
 
-            JOptionPane.showMessageDialog(null, "Please Contact Your Service Provider");
-            conn = SQLite.getInstance();
+            JOptionPane.showMessageDialog(this, "An error occured while adding an item", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
 
         }
 
@@ -1426,8 +1513,7 @@ public class ExpensesScreen extends JFrame
         catch (SQLException ex)
         {
 
-            JOptionPane.showMessageDialog(null, "Please Contact Your Service Provider");
-            conn = SQLite.getInstance();
+            JOptionPane.showMessageDialog(this, "An error occured while loading", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
 
         }
 
@@ -1449,6 +1535,7 @@ public class ExpensesScreen extends JFrame
 
             lblAmount.setText("0.00");
             tbl.setVisible(false);
+            tbl.clearSelection();
 
         }
 
@@ -1478,6 +1565,90 @@ public class ExpensesScreen extends JFrame
         chkTopRight.setSelected(isSelected);
         chkBottomLeft.setSelected(isSelected);
         chkBottomRight.setSelected(isSelected);
+
+    }
+
+    private void onDelete(final String where, final ArrayList<String> in)
+    {
+
+        final SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final String date = SimpleDateFormat.format(dcDate.getDate());
+        final String _in = String.valueOf(in).replace("[", "(").replace("]", ")");
+        final String sql = "DELETE FROM Expenses WHERE user_id=? AND expense_date=? AND "
+                           + where
+                                   + " IN "
+                                   + _in
+                                   + ";";
+
+        try
+        {
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, user_id);
+            ps.setString(2, date);
+            ps.execute();
+            ps.close();
+            JOptionPane.showMessageDialog(this, "Deleted Successfully!", "Delete", JOptionPane.INFORMATION_MESSAGE);
+
+            loadExpenses();
+
+            if (chkTopLeft.isSelected())
+                lblTopLeftAmount.setText("0.00");
+            if (chkTopRight.isSelected())
+                lblTopRightAmount.setText("0.00");
+            if (chkBottomLeft.isSelected())
+                lblBottomLeftAmount.setText("0.00");
+            if (chkBottomRight.isSelected())
+                lblBottomRightAmount.setText("0.00");
+
+            getTotal();
+
+        }
+        catch (SQLException ex)
+        {
+
+            JOptionPane.showMessageDialog(this, "An error occured while deleting", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }
+
+    private void setComponentsEnabled(final boolean isEnabled)
+    {
+
+        btnCalculator.setEnabled(isEnabled);
+        cmbCategory.setEnabled(isEnabled);
+        tfQuantity.setEnabled(isEnabled);
+        tfAmount.setEnabled(isEnabled);
+        tfDescription.setEnabled(isEnabled);
+        btnAdd.setEnabled(isEnabled);
+        btnClear.setEnabled(isEnabled);
+        dcDate.setEnabled(isEnabled);
+        btnToday.setEnabled(isEnabled);
+        btnGraph.setEnabled(isEnabled);
+        btnDelete.setEnabled(isEnabled);
+
+    }
+
+    private ArrayList<String> getCategories()
+    {
+
+        final String topLeft = "\"" + lblTopLeft.getText() + "\"";
+        final String topRight = "\"" + lblTopRight.getText() + "\"";
+        final String bottomLeft = "\"" + lblBottomLeft.getText() + "\"";
+        final String bottomRight = "\"" + lblBottomRight.getText() + "\"";
+
+        final ArrayList<String> categories = new ArrayList<>();
+        if (chkTopLeft.isSelected())
+            categories.add(topLeft);
+        if (chkTopRight.isSelected())
+            categories.add(topRight);
+        if (chkBottomLeft.isSelected())
+            categories.add(bottomLeft);
+        if (chkBottomRight.isSelected())
+            categories.add(bottomRight);
+
+        return categories;
 
     }
 

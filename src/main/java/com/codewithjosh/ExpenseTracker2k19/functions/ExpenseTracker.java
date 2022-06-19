@@ -190,4 +190,13 @@ public class ExpenseTracker
 
     }
 
+    public String getCell(final JTable tbl)
+    {
+
+        final int row = tbl.getSelectedRow();
+        final String cell = String.valueOf(tbl.getModel().getValueAt(row, 0));
+        return cell;
+
+    }
+
 }
