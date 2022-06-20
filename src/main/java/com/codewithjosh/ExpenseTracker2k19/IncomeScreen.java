@@ -78,6 +78,7 @@ public class IncomeScreen extends JFrame
     int current = 0;
     Connection conn = null;
     PreparedStatement ps = null;
+    ResultSet rs = null;
 
     public IncomeScreen()
     {
@@ -443,10 +444,25 @@ public class IncomeScreen extends JFrame
 
         TablePanel.setLayout(new AbsoluteLayout());
 
+        chkTopLeft.addItemListener((ItemEvent evt)
+                ->
+        {
+            chkTopLeftItemStateChanged(evt);
+                });
         TablePanel.add(chkTopLeft, new AbsoluteConstraints(320, 0, -1, -1));
 
+        chkTopRight.addItemListener((ItemEvent evt)
+                ->
+        {
+            chkTopRightItemStateChanged(evt);
+                });
         TablePanel.add(chkTopRight, new AbsoluteConstraints(680, 0, -1, -1));
 
+        chkBottomLeft.addItemListener((ItemEvent evt)
+                ->
+        {
+            chkBottomLeftItemStateChanged(evt);
+                });
         TablePanel.add(chkBottomLeft, new AbsoluteConstraints(320, 170, -1, -1));
 
         pTopLeft.setLayout(new AbsoluteLayout());
@@ -928,6 +944,27 @@ public class IncomeScreen extends JFrame
 
     }
 
+    private void chkTopLeftItemStateChanged(ItemEvent evt)
+    {
+
+        onSelected(chkTopLeft, lblTopLeftAmount, tblTopLeft);
+
+    }
+
+    private void chkTopRightItemStateChanged(ItemEvent evt)
+    {
+
+        onSelected(chkTopRight, lblTopRightAmount, tblTopRight);
+
+    }
+
+    private void chkBottomLeftItemStateChanged(ItemEvent evt)
+    {
+
+        onSelected(chkBottomLeft, lblBottomLeftAmount, tblBottomLeft);
+
+    }
+
     public static void main(String args[])
     {
 
@@ -1161,10 +1198,101 @@ public class IncomeScreen extends JFrame
     private void loadIncomes()
     {
 
+        final String sql = "SELECT * FROM Incomes WHERE user_id=? AND income_date=?";
+        final SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final String date = SimpleDateFormat.format(dcDate.getDate());
+        final String topLeft = lblTopLeft.getText();
+        final String topRight = lblTopRight.getText();
+        final String bottomLeft = lblBottomLeft.getText();
+
+        modelTopLeft.setRowCount(0);
+        modelTopRight.setRowCount(0);
+        modelBottomLeft.setRowCount(0);
+
+        try
+        {
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, user_id);
+            ps.setString(2, date);
+
+            rs = ps.executeQuery();
+            Object[] ColumnData = new Object[4];
+            while (rs.next())
+            {
+
+                ColumnData[0] = rs.getString("income_id");
+                ColumnData[1] = rs.getString("income_quantity");
+                ColumnData[2] = rs.getString("income_amount");
+                ColumnData[3] = rs.getString("income_description");
+
+                if (topLeft.equals(rs.getString("income_category")))
+                    modelTopLeft.addRow(ColumnData);
+                else if (topRight.equals(rs.getString("income_category")))
+                    modelTopRight.addRow(ColumnData);
+                else if (bottomLeft.equals(rs.getString("income_category")))
+                    modelBottomLeft.addRow(ColumnData);
+
+                onSelected(chkTopLeft, lblTopLeftAmount, tblTopLeft);
+                onSelected(chkTopRight, lblTopRightAmount, tblTopRight);
+                onSelected(chkBottomLeft, lblBottomLeftAmount, tblBottomLeft);
+                getTotal();
+
+            }
+
+        }
+        catch (SQLException ex)
+        {
+
+            JOptionPane.showMessageDialog(this, "An error occured while loading", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
+
+        }
+
     }
 
-    private void setSelected(boolean b)
+    private void onSelected(final JCheckBox chk, final JLabel lblAmount, final JTable tbl)
     {
+
+        if (chk.isSelected())
+        {
+
+            lblAmount.setText(expenseTracker.getSum(tbl));
+            tbl.setVisible(true);
+
+        }
+
+        else
+        {
+
+            lblAmount.setText("0.00");
+            tbl.setVisible(false);
+            tbl.clearSelection();
+
+        }
+
+        getTotal();
+
+    }
+
+    private void getTotal()
+    {
+
+        final double topLeftAmount = Double.parseDouble(lblTopLeftAmount.getText());
+        final double topRightAmount = Double.parseDouble(lblTopRightAmount.getText());
+        final double bottomLeftAmount = Double.parseDouble(lblBottomLeftAmount.getText());
+
+        lblTotal.setText(String.format("%.2f", topLeftAmount
+                                                       + topRightAmount
+                                                       + bottomLeftAmount));
+
+    }
+
+    private void setSelected(final boolean isSelected)
+    {
+
+        chkTopLeft.setSelected(isSelected);
+        chkTopRight.setSelected(isSelected);
+        chkBottomLeft.setSelected(isSelected);
 
     }
 
