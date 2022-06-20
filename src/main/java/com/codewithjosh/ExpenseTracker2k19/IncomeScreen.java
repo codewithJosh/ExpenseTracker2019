@@ -4,6 +4,7 @@ import com.toedter.calendar.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
 import javax.swing.*;
@@ -81,6 +82,11 @@ public class IncomeScreen extends JFrame
         initInstances();
         initIcons();
         initTable();
+
+        onToday();
+        onClear();
+        loadIncomes();
+        setSelected(true);
 
     }
 
@@ -300,6 +306,21 @@ public class IncomeScreen extends JFrame
 
         btnClear.setContentAreaFilled(false);
         btnClear.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnClear.addFocusListener(new FocusAdapter()
+        {
+
+            @Override
+            public void focusLost(FocusEvent evt)
+            {
+                btnClearFocusLost(evt);
+            }
+
+        });
+        btnClear.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnClearActionPerformed(evt);
+                });
         DataPanel.add(btnClear, new AbsoluteConstraints(710, 80, 80, 30));
 
         btnCalculator.setContentAreaFilled(false);
@@ -433,6 +454,21 @@ public class IncomeScreen extends JFrame
 
         btnToday.setContentAreaFilled(false);
         btnToday.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnToday.addMouseListener(new MouseAdapter()
+        {
+
+            @Override
+            public void mouseEntered(MouseEvent evt)
+            {
+                btnTodayMouseEntered(evt);
+            }
+
+        });
+        btnToday.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnTodayActionPerformed(evt);
+                });
         BodyPanel.add(btnToday, new AbsoluteConstraints(270, 160, 80, 30));
 
         btnDeleteAll.setContentAreaFilled(false);
@@ -578,6 +614,37 @@ public class IncomeScreen extends JFrame
             Logger.getLogger(ExpensesScreen.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+
+    }
+
+    private void btnTodayMouseEntered(MouseEvent evt)
+    {
+
+        setSelected(true);
+        loadIncomes();
+
+    }
+
+    private void btnTodayActionPerformed(ActionEvent evt)
+    {
+
+        cmbCategory.grabFocus();
+        onToday();
+        loadIncomes();
+
+    }
+
+    private void btnClearFocusLost(FocusEvent evt)
+    {
+
+        cmbCategory.grabFocus();
+
+    }
+
+    private void btnClearActionPerformed(ActionEvent evt)
+    {
+
+        onClear();
 
     }
 
@@ -777,6 +844,46 @@ public class IncomeScreen extends JFrame
         tfQuantity.setBackground(new Color(62, 62, 62));
         tfAmount.setBackground(new Color(62, 62, 62));
         tfDescription.setBackground(new Color(62, 62, 62));
+
+    }
+
+    private void onToday()
+    {
+
+        final long millis = System.currentTimeMillis();
+
+        Date date = new Date(millis);
+        dcDate.setDate(date);
+
+    }
+
+    private void onClear()
+    {
+
+        cmbCategory.grabFocus();
+        tfQuantity.setText("1");
+        tfQuantity.setHorizontalAlignment(JTextField.TRAILING);
+        tfAmount.setText("0.00");
+        tfAmount.setHorizontalAlignment(JTextField.TRAILING);
+        tfDescription.setText("What's income did you make? (Optional)");
+        tfDescription.setHorizontalAlignment(JTextField.LEADING);
+
+        tfQuantity.setForeground(Color.GRAY);
+        tfQuantity.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        tfAmount.setForeground(Color.GRAY);
+        tfAmount.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        tfDescription.setForeground(Color.GRAY);
+        tfDescription.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+    }
+
+    private void loadIncomes()
+    {
+
+    }
+
+    private void setSelected(boolean b)
+    {
 
     }
 
