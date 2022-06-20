@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Date;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
@@ -83,6 +84,7 @@ public class IncomeScreen extends JFrame
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
+    boolean isSelecting = false;
 
     public IncomeScreen()
     {
@@ -578,6 +580,11 @@ public class IncomeScreen extends JFrame
 
         btnDelete.setContentAreaFilled(false);
         btnDelete.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnDelete.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnDeleteActionPerformed(evt);
+                });
         BodyPanel.add(btnDelete, new AbsoluteConstraints(290, 560, -1, -1));
 
         btnToday.setContentAreaFilled(false);
@@ -601,6 +608,11 @@ public class IncomeScreen extends JFrame
 
         btnDeleteAll.setContentAreaFilled(false);
         btnDeleteAll.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnDeleteAll.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnDeleteAllActionPerformed(evt);
+                });
         BodyPanel.add(btnDeleteAll, new AbsoluteConstraints(390, 560, -1, -1));
 
         lblDate.setFont(new Font("Arial", 1, 14));
@@ -1017,6 +1029,85 @@ public class IncomeScreen extends JFrame
 
     }
 
+    private void btnDeleteActionPerformed(ActionEvent evt)
+    {
+
+        final ArrayList<String> incomes = new ArrayList<>();
+        if (tblTopLeft.getSelectedRowCount() == 1)
+            incomes.add(expenseTracker.getCell(tblTopLeft));
+        if (tblTopRight.getSelectedRowCount() == 1)
+            incomes.add(expenseTracker.getCell(tblTopRight));
+        if (tblBottomLeft.getSelectedRowCount() == 1)
+            incomes.add(expenseTracker.getCell(tblBottomLeft));
+
+        if (!incomes.isEmpty())
+        {
+
+            final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the selected items?", "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            switch (response)
+            {
+
+                case JOptionPane.YES_OPTION:
+                    onDelete("income_id", incomes);
+                    break;
+
+            }
+
+        }
+        else
+            JOptionPane.showMessageDialog(this, "No selected items!", "Delete", JOptionPane.WARNING_MESSAGE);
+
+    }
+
+    private void btnDeleteAllActionPerformed(ActionEvent evt)
+    {
+
+        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to permanently delete these selected boxes?", "Confirm Delete All", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (!isSelecting)
+        {
+
+            setSelected(true);
+
+            switch (response)
+            {
+
+                case JOptionPane.YES_OPTION:
+                    onDelete("income_category", getCategories());
+                    break;
+
+                case JOptionPane.NO_OPTION:
+                    JOptionPane.showMessageDialog(this, "Please select the checkbox you want to be deleted", "Delete All", JOptionPane.INFORMATION_MESSAGE);
+                    setSelected(false);
+                    setComponentsEnabled(false);
+                    isSelecting = true;
+                    break;
+
+            }
+
+        }
+
+        else
+        {
+
+            switch (response)
+            {
+
+                case JOptionPane.YES_OPTION:
+                    onDelete("income_category", getCategories());
+                    break;
+
+            }
+
+            setComponentsEnabled(true);
+            isSelecting = false;
+            setSelected(true);
+
+        }
+
+    }
+
     public static void main(String args[])
     {
 
@@ -1382,6 +1473,85 @@ public class IncomeScreen extends JFrame
             JOptionPane.showMessageDialog(this, "An error occured while adding an item", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
 
         }
+
+    }
+
+    private void onDelete(final String where, final ArrayList<String> in)
+    {
+
+        final SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final String date = SimpleDateFormat.format(dcDate.getDate());
+        final String _in = String.valueOf(in).replace("[", "(").replace("]", ")");
+        final String sql = "DELETE FROM Incomes WHERE user_id=? AND income_date=? AND "
+                           + where
+                                   + " IN "
+                                   + _in
+                                   + ";";
+
+        try
+        {
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, user_id);
+            ps.setString(2, date);
+            ps.execute();
+            ps.close();
+            JOptionPane.showMessageDialog(this, "Deleted Successfully!", "Delete", JOptionPane.INFORMATION_MESSAGE);
+
+            loadIncomes();
+
+            if (chkTopLeft.isSelected())
+                lblTopLeftAmount.setText("0.00");
+            if (chkTopRight.isSelected())
+                lblTopRightAmount.setText("0.00");
+            if (chkBottomLeft.isSelected())
+                lblBottomLeftAmount.setText("0.00");
+
+            getTotal();
+
+        }
+        catch (SQLException ex)
+        {
+
+            JOptionPane.showMessageDialog(this, "An error occured while deleting", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }
+
+    private ArrayList<String> getCategories()
+    {
+
+        final String topLeft = "\"" + lblTopLeft.getText() + "\"";
+        final String topRight = "\"" + lblTopRight.getText() + "\"";
+        final String bottomLeft = "\"" + lblBottomLeft.getText() + "\"";
+
+        final ArrayList<String> categories = new ArrayList<>();
+        if (chkTopLeft.isSelected())
+            categories.add(topLeft);
+        if (chkTopRight.isSelected())
+            categories.add(topRight);
+        if (chkBottomLeft.isSelected())
+            categories.add(bottomLeft);
+
+        return categories;
+
+    }
+
+    private void setComponentsEnabled(final boolean isEnabled)
+    {
+
+        btnCalculator.setEnabled(isEnabled);
+        cmbCategory.setEnabled(isEnabled);
+        tfQuantity.setEnabled(isEnabled);
+        tfAmount.setEnabled(isEnabled);
+        tfDescription.setEnabled(isEnabled);
+        btnAdd.setEnabled(isEnabled);
+        btnClear.setEnabled(isEnabled);
+        dcDate.setEnabled(isEnabled);
+        btnToday.setEnabled(isEnabled);
+        btnGraph.setEnabled(isEnabled);
+        btnDelete.setEnabled(isEnabled);
 
     }
 
