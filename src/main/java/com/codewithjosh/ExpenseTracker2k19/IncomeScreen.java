@@ -4,12 +4,14 @@ import com.toedter.calendar.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import main.java.com.codewithjosh.ExpenseTracker2k19.functions.ExpenseTracker;
+import main.java.com.codewithjosh.ExpenseTracker2k19.functions.*;
 import org.netbeans.lib.awtextra.*;
 
 public class IncomeScreen extends JFrame
@@ -74,6 +76,8 @@ public class IncomeScreen extends JFrame
     Preferences pref;
     int user_id = 0;
     int current = 0;
+    Connection conn = null;
+    PreparedStatement ps = null;
 
     public IncomeScreen()
     {
@@ -279,15 +283,109 @@ public class IncomeScreen extends JFrame
             "PROFIT",
             "OTHERS"
         }));
+        cmbCategory.addFocusListener(new FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(FocusEvent evt)
+            {
+                cmbCategoryFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt)
+            {
+                cmbCategoryFocusLost(evt);
+            }
+
+        });
         DataPanel.add(cmbCategory, new AbsoluteConstraints(60, 80, -1, 30));
 
         tfQuantity.setBorder(null);
+        tfQuantity.addFocusListener(new FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(FocusEvent evt)
+            {
+                tfQuantityFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt)
+            {
+                tfQuantityFocusLost(evt);
+            }
+
+        });
+        tfQuantity.addKeyListener(new KeyAdapter()
+        {
+
+            @Override
+            public void keyTyped(KeyEvent evt)
+            {
+                tfQuantityKeyTyped(evt);
+            }
+
+        });
         DataPanel.add(tfQuantity, new AbsoluteConstraints(150, 80, 40, 30));
 
         tfAmount.setBorder(null);
+        tfAmount.addFocusListener(new FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(FocusEvent evt)
+            {
+                tfAmountFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt)
+            {
+                tfAmountFocusLost(evt);
+            }
+
+        });
+        tfAmount.addKeyListener(new KeyAdapter()
+        {
+
+            @Override
+            public void keyTyped(KeyEvent evt)
+            {
+                tfAmountKeyTyped(evt);
+            }
+
+        });
         DataPanel.add(tfAmount, new AbsoluteConstraints(200, 80, 80, 30));
 
         tfDescription.setBorder(null);
+        tfDescription.addFocusListener(new FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(FocusEvent evt)
+            {
+                tfDescriptionFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt)
+            {
+                tfDescriptionFocusLost(evt);
+            }
+
+        });
+        tfDescription.addKeyListener(new KeyAdapter()
+        {
+
+            @Override
+            public void keyTyped(KeyEvent evt)
+            {
+                tfDescriptionKeyTyped(evt);
+            }
+
+        });
         DataPanel.add(tfDescription, new AbsoluteConstraints(290, 80, 370, 30));
         DataPanel.add(s, new AbsoluteConstraints(50, 120, 740, 10));
 
@@ -302,6 +400,11 @@ public class IncomeScreen extends JFrame
 
         btnAdd.setContentAreaFilled(false);
         btnAdd.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnAdd.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnAddActionPerformed(evt);
+                });
         DataPanel.add(btnAdd, new AbsoluteConstraints(670, 80, 30, 30));
 
         btnClear.setContentAreaFilled(false);
@@ -648,6 +751,183 @@ public class IncomeScreen extends JFrame
 
     }
 
+    private void cmbCategoryFocusGained(FocusEvent evt)
+    {
+
+        cmbCategory.setForeground(Color.BLACK);
+
+    }
+
+    private void cmbCategoryFocusLost(FocusEvent evt)
+    {
+
+        if (cmbCategory.getSelectedIndex() != 0)
+            cmbCategory.setForeground(new Color(50, 166, 248));
+
+        else
+            cmbCategory.setForeground(new Color(255, 51, 51));
+
+    }
+
+    private void tfQuantityFocusGained(FocusEvent evt)
+    {
+
+        tfQuantity.setHorizontalAlignment(JTextField.CENTER);
+        tfQuantity.setForeground(new Color(50, 166, 248));
+        tfQuantity.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(50, 166, 248)));
+        tfQuantity.setText("");
+
+    }
+
+    private void tfQuantityFocusLost(FocusEvent evt)
+    {
+
+        tfQuantity.setHorizontalAlignment(JTextField.TRAILING);
+        tfQuantity.setBorder(BorderFactory.createLineBorder(new Color(50, 166, 248)));
+
+        final String quantity = tfQuantity.getText();
+
+        tfQuantity.setText(!quantity.equals("")
+                           ? quantity
+                           : "1");
+
+        if (Integer.parseInt(tfQuantity.getText()) == 0)
+        {
+
+            tfQuantity.setForeground(new Color(255, 51, 51));
+            tfQuantity.setBorder(BorderFactory.createLineBorder(new Color(255, 51, 51)));
+
+        }
+
+        if (quantity.startsWith("0") && quantity.length() == 2)
+        {
+
+            final int _quantity = Integer.parseInt(quantity);
+            tfQuantity.setText(String.valueOf(_quantity));
+
+        }
+
+    }
+
+    private void tfQuantityKeyTyped(KeyEvent evt)
+    {
+
+        final char input = evt.getKeyChar();
+
+        if (!Character.isDigit(input)
+                    || input == KeyEvent.VK_BACK_SPACE
+                    || tfQuantity.getText().length() > 1)
+            evt.consume();
+
+    }
+
+    private void tfAmountFocusGained(FocusEvent evt)
+    {
+
+        tfAmount.setHorizontalAlignment(JTextField.CENTER);
+        tfAmount.setForeground(new Color(50, 166, 248));
+        tfAmount.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(50, 166, 248)));
+        tfAmount.setText("");
+
+    }
+
+    private void tfAmountFocusLost(FocusEvent evt)
+    {
+
+        tfAmount.setHorizontalAlignment(JTextField.TRAILING);
+        tfAmount.setBorder(BorderFactory.createLineBorder(new Color(50, 166, 248)));
+
+        final String amount = tfAmount.getText();
+
+        if (amount.equals("") || Integer.parseInt(amount) == 0)
+        {
+
+            tfAmount.setText("0.00");
+            tfAmount.setForeground(new Color(255, 51, 51));
+            tfAmount.setBorder(BorderFactory.createLineBorder(new Color(255, 51, 51)));
+
+        }
+
+        else
+        {
+
+            tfAmount.setText(String.format("%.2f", Double.parseDouble(amount)));
+            tfAmount.setBorder(BorderFactory.createLineBorder(new Color(50, 166, 248)));
+
+        }
+
+    }
+
+    private void tfAmountKeyTyped(KeyEvent evt)
+    {
+
+        final char input = evt.getKeyChar();
+
+        if (!Character.isDigit(input)
+                    || input == KeyEvent.VK_BACK_SPACE)
+            evt.consume();
+
+    }
+
+    private void tfDescriptionFocusGained(FocusEvent evt)
+    {
+
+        tfDescription.setHorizontalAlignment(JTextField.CENTER);
+        tfDescription.setForeground(new Color(50, 166, 248));
+        tfDescription.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(50, 166, 248)));
+        tfDescription.setText("");
+
+    }
+
+    private void tfDescriptionFocusLost(FocusEvent evt)
+    {
+
+        tfDescription.setHorizontalAlignment(JTextField.LEADING);
+
+        final String description = tfDescription.getText().trim();
+
+        if (description.equals(""))
+        {
+
+            tfDescription.setText("What's income did you make? (Optional)");
+            tfDescription.setForeground(Color.GRAY);
+            tfDescription.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        }
+        else
+            tfDescription.setBorder(BorderFactory.createLineBorder(new Color(50, 166, 248)));
+
+    }
+
+    private void tfDescriptionKeyTyped(KeyEvent evt)
+    {
+
+        final char input = evt.getKeyChar();
+
+        if (!Character.isAlphabetic(input)
+                    || input == KeyEvent.VK_BACK_SPACE)
+            evt.consume();
+
+    }
+
+    private void btnAddActionPerformed(ActionEvent evt)
+    {
+
+        final String category = String.valueOf(cmbCategory.getSelectedItem());
+        final int quantity = Integer.parseInt(tfQuantity.getText());
+        final double amount = Double.parseDouble(tfAmount.getText());
+        final String description = tfDescription.getText().trim();
+
+        if (category.equals("<Choose>")
+                    || quantity == 0
+                    || amount == 0)
+            JOptionPane.showMessageDialog(this, "All fields are required!", "Add", JOptionPane.WARNING_MESSAGE);
+
+        else
+            onAdd(category, quantity, amount, description);
+
+    }
+
     public static void main(String args[])
     {
 
@@ -692,6 +972,7 @@ public class IncomeScreen extends JFrame
         pref = Preferences.userNodeForPackage(Class.class);
         user_id = pref.getInt("user_id", 0);
         current = pref.getInt("current", 0);
+        conn = SQLite.getInstance();
 
     }
 
@@ -884,6 +1165,43 @@ public class IncomeScreen extends JFrame
 
     private void setSelected(boolean b)
     {
+
+    }
+
+    private void onAdd(final String category, final int quantity, final double amount, final String description)
+    {
+
+        final String sql = "INSERT INTO Incomes (user_id, income_category, income_quantity, income_amount, income_description, income_date) VALUES (?,?,?,?,?,?)";
+
+        try
+        {
+
+            ps = conn.prepareStatement(sql);
+            final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            final String date = simpleDateFormat.format(dcDate.getDate());
+
+            ps.setInt(1, user_id);
+            ps.setString(2, category);
+            ps.setInt(3, quantity);
+            ps.setDouble(4, amount);
+            ps.setString(5, !description.equals("What's income did you make? (Optional)")
+                            ? description
+                            : "");
+            ps.setString(6, date);
+            ps.execute();
+            ps.close();
+
+            onClear();
+            loadIncomes();
+
+        }
+        catch (HeadlessException
+               | SQLException ex)
+        {
+
+            JOptionPane.showMessageDialog(this, "An error occured while adding an item", "Expense Tracker", JOptionPane.ERROR_MESSAGE);
+
+        }
 
     }
 
