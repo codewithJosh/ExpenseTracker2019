@@ -3,6 +3,7 @@ package main.java.com.codewithjosh.ExpenseTracker2k19;
 import com.toedter.calendar.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
 import javax.swing.*;
@@ -241,6 +242,11 @@ public class BudgetScreen extends JFrame
 
         btnBack.setContentAreaFilled(false);
         btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnBack.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnBackActionPerformed(evt);
+                });
         DataPanel.add(btnBack, new AbsoluteConstraints(20, 20, -1, -1));
 
         btnAdd.setContentAreaFilled(false);
@@ -253,6 +259,11 @@ public class BudgetScreen extends JFrame
 
         btnCalculator.setContentAreaFilled(false);
         btnCalculator.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCalculator.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnCalculatorActionPerformed(evt);
+                });
         DataPanel.add(btnCalculator, new AbsoluteConstraints(680, 30, -1, -1));
 
         dcFrom.setDateFormatString("yyyy-MM-dd");
@@ -393,6 +404,32 @@ public class BudgetScreen extends JFrame
         isNightMode = !isNightMode;
         onMode();
         pref.putBoolean("isNightMode", isNightMode);
+
+    }
+
+    private void btnBackActionPerformed(ActionEvent evt)
+    {
+
+        dispose();
+        new HomeScreen().setVisible(true);
+
+    }
+
+    private void btnCalculatorActionPerformed(ActionEvent evt)
+    {
+
+        try
+        {
+
+            Runtime.getRuntime().exec("calc");
+
+        }
+        catch (IOException ex)
+        {
+
+            Logger.getLogger(ExpensesScreen.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
 
     }
 
