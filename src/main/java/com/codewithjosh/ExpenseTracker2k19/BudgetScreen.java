@@ -2,7 +2,9 @@ package main.java.com.codewithjosh.ExpenseTracker2k19;
 
 import com.toedter.calendar.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.logging.*;
+import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import main.java.com.codewithjosh.ExpenseTracker2k19.functions.ExpenseTracker;
@@ -44,6 +46,10 @@ public class BudgetScreen extends JFrame
 
     ExpenseTracker expenseTracker;
     DefaultTableModel model = new DefaultTableModel();
+    static int currentXPosition = 0;
+    static int currentYPosition = 0;
+    Preferences pref;
+    int user_id = 0;
 
     public BudgetScreen()
     {
@@ -109,14 +115,76 @@ public class BudgetScreen extends JFrame
         btnMinimize.setFont(new Font("Tahoma", 1, 18));
         btnMinimize.setForeground(new Color(240, 240, 240));
         btnMinimize.setText("—");
+        btnMinimize.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnMinimizeActionPerformed(evt);
+                });
         HeadPanel.add(btnMinimize, new AbsoluteConstraints(670, 0, -1, 30));
 
         btnClose.setContentAreaFilled(false);
         btnClose.setFont(new Font("Tahoma", 1, 14));
         btnClose.setForeground(new Color(240, 240, 240));
         btnClose.setText("X");
+        btnClose.addFocusListener(new FocusAdapter()
+        {
+
+            @Override
+            public void focusGained(FocusEvent evt)
+            {
+                btnCloseFocusGained(evt);
+            }
+
+            @Override
+            public void focusLost(FocusEvent evt)
+            {
+                btnCloseFocusLost(evt);
+            }
+
+        });
+        btnClose.addMouseListener(new MouseAdapter()
+        {
+
+            @Override
+            public void mouseEntered(MouseEvent evt)
+            {
+                btnCloseMouseEntered(evt);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt)
+            {
+                btnCloseMouseExited(evt);
+            }
+
+        });
+        btnClose.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnCloseActionPerformed(evt);
+                });
         HeadPanel.add(btnClose, new AbsoluteConstraints(710, 0, -1, 30));
 
+        lblHead.addMouseMotionListener(new MouseMotionAdapter()
+        {
+
+            @Override
+            public void mouseDragged(MouseEvent evt)
+            {
+                lblHeadMouseDragged(evt);
+            }
+
+        });
+        lblHead.addMouseListener(new MouseAdapter()
+        {
+
+            @Override
+            public void mousePressed(MouseEvent evt)
+            {
+                lblHeadMousePressed(evt);
+            }
+
+        });
         HeadPanel.add(lblHead, new AbsoluteConstraints(0, 0, 750, 30));
 
         getContentPane().add(HeadPanel, new AbsoluteConstraints(0, 0, 750, -1));
@@ -237,6 +305,82 @@ public class BudgetScreen extends JFrame
 
     }
 
+    private void btnMinimizeActionPerformed(ActionEvent evt)
+    {
+
+        setState(ICONIFIED);
+
+    }
+
+    private void btnCloseFocusGained(FocusEvent evt)
+    {
+
+        btnClose.setForeground(new Color(255, 51, 51));
+
+    }
+
+    private void btnCloseFocusLost(FocusEvent evt)
+    {
+
+        btnClose.setForeground(new Color(240, 240, 240));
+
+    }
+
+    private void btnCloseMouseEntered(MouseEvent evt)
+    {
+
+        btnClose.setForeground(new Color(255, 51, 51));
+
+    }
+
+    private void btnCloseMouseExited(MouseEvent evt)
+    {
+
+        btnClose.setForeground(new Color(240, 240, 240));
+
+    }
+
+    private void btnCloseActionPerformed(ActionEvent evt)
+    {
+
+        final int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Confirm Log Out", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        switch (response)
+        {
+
+            case JOptionPane.YES_OPTION:
+                dispose();
+                pref.putInt("user_id", 0);
+                new MainScreen().setVisible(true);
+                break;
+
+            case JOptionPane.NO_OPTION:
+                System.exit(0);
+                break;
+
+        }
+
+    }
+
+    private void lblHeadMousePressed(MouseEvent evt)
+    {
+
+        currentXPosition = evt.getX();
+        currentYPosition = evt.getY();
+
+    }
+
+    private void lblHeadMouseDragged(MouseEvent evt)
+    {
+
+        final int futureXPosition = evt.getXOnScreen();
+        final int futureYPosition = evt.getYOnScreen();
+
+        setLocation(futureXPosition - currentXPosition, futureYPosition
+                                                                - currentYPosition);
+
+    }
+
     public static void main(String args[])
     {
 
@@ -278,6 +422,8 @@ public class BudgetScreen extends JFrame
     {
 
         expenseTracker = new ExpenseTracker();
+        pref = Preferences.userNodeForPackage(Class.class);
+        user_id = pref.getInt("user_id", 0);
 
     }
 
