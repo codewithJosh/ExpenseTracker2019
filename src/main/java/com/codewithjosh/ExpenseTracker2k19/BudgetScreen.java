@@ -50,6 +50,7 @@ public class BudgetScreen extends JFrame
     static int currentYPosition = 0;
     Preferences pref;
     int user_id = 0;
+    boolean isNightMode = false;
 
     public BudgetScreen()
     {
@@ -109,6 +110,11 @@ public class BudgetScreen extends JFrame
         HeadPanel.add(lblProjectTitle, new AbsoluteConstraints(40, 0, 290, 30));
 
         btnMode.setContentAreaFilled(false);
+        btnMode.addActionListener((ActionEvent evt)
+                ->
+        {
+            btnModeActionPerformed(evt);
+                });
         HeadPanel.add(btnMode, new AbsoluteConstraints(0, 0, 30, 30));
 
         btnMinimize.setContentAreaFilled(false);
@@ -381,6 +387,15 @@ public class BudgetScreen extends JFrame
 
     }
 
+    private void btnModeActionPerformed(ActionEvent evt)
+    {
+
+        isNightMode = !isNightMode;
+        onMode();
+        pref.putBoolean("isNightMode", isNightMode);
+
+    }
+
     public static void main(String args[])
     {
 
@@ -424,6 +439,7 @@ public class BudgetScreen extends JFrame
         expenseTracker = new ExpenseTracker();
         pref = Preferences.userNodeForPackage(Class.class);
         user_id = pref.getInt("user_id", 0);
+        isNightMode = pref.getBoolean("isNightMode", false);
 
     }
 
@@ -432,6 +448,8 @@ public class BudgetScreen extends JFrame
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(expenseTracker.getString("logo"))));
         lblHead.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("head"))));
+
+        onMode();
 
     }
 
@@ -457,6 +475,83 @@ public class BudgetScreen extends JFrame
         tbl.getColumnModel().getColumn(3).setPreferredWidth(140);
         tbl.getColumnModel().getColumn(4).setPreferredWidth(140);
         tbl.getColumnModel().getColumn(5).setPreferredWidth(140);
+
+    }
+
+    private void onMode()
+    {
+
+        final Color colorBodyPanel = isNightMode
+                                     ? new Color(41, 41, 41)
+                                     : new Color(240, 240, 240);
+
+        final Color colorPrimary = isNightMode
+                                   ? new Color(62, 62, 62)
+                                   : new Color(225, 225, 225);
+
+        final Color colorTitle = isNightMode
+                                 ? new Color(51, 153, 255)
+                                 : new Color(0, 0, 0);
+
+        final Color colorLbl = isNightMode
+                               ? new Color(204, 204, 204)
+                               : new Color(0, 0, 0);
+
+        final String mode = isNightMode
+                            ? "sun"
+                            : "moon";
+
+        final String back = isNightMode
+                            ? "nightback"
+                            : "dayback";
+
+        final String calculator = isNightMode
+                                  ? "nightcalculator"
+                                  : "daycalculator";
+
+        final String clear = isNightMode
+                             ? "nightclear"
+                             : "dayclear";
+
+        final String add = isNightMode
+                           ? "nightadd"
+                           : "dayadd";
+
+        final String graph = isNightMode
+                             ? "nightgraph"
+                             : "daygraph";
+
+        final String delete = isNightMode
+                              ? "nightdelete"
+                              : "daydelete";
+
+        final String deleteAll = isNightMode
+                                 ? "nightdeleteAll"
+                                 : "daydeleteAll";
+
+        BodyPanel.setBackground(colorBodyPanel);
+        DataPanel.setBackground(colorPrimary);
+
+        lblTitle.setForeground(colorTitle);
+        lblCategory.setForeground(colorLbl);
+        lblAmount.setForeground(colorLbl);
+        lblDate.setForeground(colorLbl);
+        lblFrom.setForeground(colorLbl);
+        lblTo.setForeground(colorLbl);
+        lblBalance.setForeground(colorLbl);
+        lblTotal.setForeground(colorLbl);
+
+        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(mode))));
+        btnBack.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(back))));
+        btnCalculator.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(calculator))));
+        btnClear.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(clear))));
+        btnAdd.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(add))));
+
+        btnGraph.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(graph))));
+        btnDelete.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(delete))));
+        btnDeleteAll.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(deleteAll))));
+
+        tfAmount.setBackground(colorPrimary);
 
     }
 
