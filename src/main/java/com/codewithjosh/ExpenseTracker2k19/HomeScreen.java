@@ -32,7 +32,7 @@ public class HomeScreen extends JFrame
     ExpenseTracker expenseTracker;
     static int currentXPosition = 0;
     static int currentYPosition = 0;
-    int current = 0;
+    boolean isNightMode = false;
     int position = 0;
     Preferences pref;
 
@@ -382,22 +382,9 @@ public class HomeScreen extends JFrame
     private void btnModeActionPerformed(ActionEvent evt)
     {
 
-        switch (current)
-        {
-
-            case 0:
-                onNightMode();
-                current = 1;
-                break;
-
-            case 1:
-                onDayMode();
-                current = 0;
-                break;
-
-        }
-
-        pref.putInt("current", current);
+        isNightMode = !isNightMode;
+        onMode();
+        pref.putBoolean("isNightMode", isNightMode);
 
     }
 
@@ -568,7 +555,7 @@ public class HomeScreen extends JFrame
 
         expenseTracker = new ExpenseTracker();
         pref = Preferences.userNodeForPackage(Class.class);
-        current = pref.getInt("current", 0);
+        isNightMode = pref.getBoolean("isNightMode", false);
         position = pref.getInt("position", 0);
 
     }
@@ -576,6 +563,7 @@ public class HomeScreen extends JFrame
     private void initIcons()
     {
 
+        nav.grabFocus();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(expenseTracker.getString("logo"))));
         lblHead.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("head"))));
 
@@ -600,38 +588,29 @@ public class HomeScreen extends JFrame
 
         }
 
-        switch (current)
-        {
-
-            case 0:
-                onDayMode();
-                break;
-
-            case 1:
-                onNightMode();
-                break;
-
-        }
+        onMode();
 
     }
 
-    private void onDayMode()
+    private void onMode()
     {
 
-        BodyPanel.setBackground(new Color(240, 240, 240));
-        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("moon"))));
-        btnNext.setForeground(new Color(240, 240, 240));
-        btnPrevious.setForeground(new Color(240, 240, 240));
+        final String mode = isNightMode
+                            ? "sun"
+                            : "moon";
 
-    }
+        final Color colorBodyPanel = isNightMode
+                                     ? new Color(41, 41, 41)
+                                     : new Color(240, 240, 240);
 
-    private void onNightMode()
-    {
+        final Color colorButton = isNightMode
+                                  ? new Color(130, 130, 130)
+                                  : new Color(240, 240, 240);
 
-        BodyPanel.setBackground(new Color(41, 41, 41));
-        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("sun"))));
-        btnNext.setForeground(new Color(130, 130, 130));
-        btnPrevious.setForeground(new Color(130, 130, 130));
+        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(mode))));
+        BodyPanel.setBackground(colorBodyPanel);
+        btnNext.setForeground(colorButton);
+        btnPrevious.setForeground(colorButton);
 
     }
 

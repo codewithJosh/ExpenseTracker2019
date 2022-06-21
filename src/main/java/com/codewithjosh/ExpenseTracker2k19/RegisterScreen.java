@@ -34,8 +34,7 @@ public class RegisterScreen extends JFrame
     ExpenseTracker expenseTracker;
     static int currentXPosition = 0;
     static int currentYPosition = 0;
-    int future = 0;
-    int current = 0;
+    boolean isNightMode = false;
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -452,50 +451,37 @@ public class RegisterScreen extends JFrame
     private void btnModeFocusGained(FocusEvent evt)
     {
 
-        onMode();
+        onHover();
 
     }
 
     private void btnModeFocusLost(FocusEvent evt)
     {
 
-        offMode();
+        offHover();
 
     }
 
     private void btnModeMouseEntered(MouseEvent evt)
     {
 
-        onMode();
+        onHover();
 
     }
 
     private void btnModeMouseExited(MouseEvent evt)
     {
 
-        offMode();
+        offHover();
 
     }
 
     private void btnModeActionPerformed(ActionEvent evt)
     {
 
-        switch (current)
-        {
-
-            case 0:
-                onNightMode(false);
-                current = 1;
-                break;
-
-            case 1:
-                onDayMode(false);
-                current = 0;
-                break;
-
-        }
-
-        pref.putInt("current", current);
+        isNightMode = !isNightMode;
+        onMode(false);
+        pref.putBoolean("isNightMode", isNightMode);
 
     }
 
@@ -561,20 +547,12 @@ public class RegisterScreen extends JFrame
 
             tfUsername.setText("Enter your Username");
 
-            switch (current)
-            {
+            final Color colorFields = isNightMode
+                                      ? Color.GRAY
+                                      : Color.BLACK;
 
-                case 0:
-                    tfUsername.setForeground(Color.BLACK);
-                    tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-                    break;
-
-                case 1:
-                    tfUsername.setForeground(Color.GRAY);
-                    tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-                    break;
-
-            }
+            tfUsername.setForeground(colorFields);
+            tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
         }
 
@@ -607,20 +585,12 @@ public class RegisterScreen extends JFrame
 
             pfPassword.setText("******");
 
-            switch (current)
-            {
+            final Color colorFields = isNightMode
+                                      ? Color.GRAY
+                                      : Color.BLACK;
 
-                case 0:
-                    pfPassword.setForeground(Color.BLACK);
-                    pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-                    break;
-
-                case 1:
-                    pfPassword.setForeground(Color.GRAY);
-                    pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-                    break;
-
-            }
+            pfPassword.setForeground(colorFields);
+            pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
         }
 
@@ -653,20 +623,12 @@ public class RegisterScreen extends JFrame
 
             pfRePassword.setText("******");
 
-            switch (current)
-            {
+            final Color colorFields = isNightMode
+                                      ? Color.GRAY
+                                      : Color.BLACK;
 
-                case 0:
-                    pfRePassword.setForeground(Color.BLACK);
-                    pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-                    break;
-
-                case 1:
-                    pfRePassword.setForeground(Color.GRAY);
-                    pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-                    break;
-
-            }
+            pfRePassword.setForeground(colorFields);
+            pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
         }
 
@@ -703,6 +665,10 @@ public class RegisterScreen extends JFrame
     private void btnRegisterActionPerformed(ActionEvent evt)
     {
 
+        final Color colorFields = isNightMode
+                                  ? Color.GRAY
+                                  : Color.BLACK;
+
         final String username = tfUsername.getText().toLowerCase().trim();
         final String password = pfPassword.getText().trim();
         final String repassword = pfRePassword.getText().trim();
@@ -715,50 +681,28 @@ public class RegisterScreen extends JFrame
             JOptionPane.showMessageDialog(this, "All fields are required!", "Sign Up", JOptionPane.WARNING_MESSAGE);
 
             if (username.equals("enter your username"))
-                switch (current)
-                {
+            {
 
-                    case 0:
-                        tfUsername.setForeground(Color.BLACK);
-                        tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-                        break;
+                tfUsername.setForeground(colorFields);
+                tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
-                    case 1:
-                        tfUsername.setForeground(Color.GRAY);
-                        tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-                        break;
+            }
 
-                }
             if (password.equals("******"))
-                switch (current)
-                {
+            {
 
-                    case 0:
-                        pfPassword.setForeground(Color.BLACK);
-                        pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-                        break;
+                pfPassword.setForeground(colorFields);
+                pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
-                    case 1:
-                        pfPassword.setForeground(Color.GRAY);
-                        pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-                        break;
+            }
 
-                }
             if (repassword.equals("******"))
-                switch (current)
-                {
+            {
 
-                    case 0:
-                        pfRePassword.setForeground(Color.BLACK);
-                        pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
-                        break;
+                pfRePassword.setForeground(colorFields);
+                pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
-                    case 1:
-                        pfRePassword.setForeground(Color.GRAY);
-                        pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-                        break;
-
-                }
+            }
 
         }
         else if (password.length() < 6)
@@ -827,7 +771,7 @@ public class RegisterScreen extends JFrame
         expenseTracker = new ExpenseTracker();
         conn = SQLite.getInstance();
         pref = Preferences.userNodeForPackage(Class.class);
-        current = pref.getInt("current", 0);
+        isNightMode = pref.getBoolean("isNightMode", false);
 
     }
 
@@ -845,136 +789,87 @@ public class RegisterScreen extends JFrame
         pfPassword.setText("******");
         pfRePassword.setText("******");
 
-        switch (current)
-        {
-
-            case 0:
-                onDayMode(true);
-                break;
-
-            case 1:
-                onNightMode(true);
-                break;
-
-        }
+        onMode(true);
 
     }
 
-    private void onMode()
+    private void onHover()
     {
 
-        switch (future)
-        {
-            case 0:
-                btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("dayhover"))));
-                break;
+        final String hover = isNightMode
+                             ? "dayhover"
+                             : "nighthover";
 
-            case 1:
-                btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("nighthover"))));
-                break;
-        }
+        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(hover))));
 
     }
 
-    private void offMode()
+    private void offHover()
     {
 
-        switch (future)
-        {
+        final String hover = isNightMode
+                             ? "day"
+                             : "night";
 
-            case 0:
-                btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("day"))));
-                break;
-
-            case 1:
-                btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString("night"))));
-                break;
-
-        }
+        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(hover))));
 
     }
 
-    private void onDayMode(boolean isInitial)
+    private void onMode(boolean isInitial)
     {
+
+        final String mode = isInitial
+                            ? isNightMode
+                              ? "day"
+                              : "night"
+                            : isNightMode
+                              ? "dayhover"
+                              : "nighthover";
+
+        final Color colorBodyPanel = isNightMode
+                                     ? new Color(41, 41, 41)
+                                     : new Color(240, 240, 240);
+
+        final Color colorLbl = isNightMode
+                               ? new Color(240, 240, 240)
+                               : new Color(51, 51, 51);
+
+        final Color colorFields = isNightMode
+                                  ? Color.GRAY
+                                  : Color.BLACK;
 
         final String username = tfUsername.getText().toLowerCase().trim();
         final String password = pfPassword.getText().trim();
         final String repassword = pfRePassword.getText().trim();
 
-        BodyPanel.setBackground(new Color(240, 240, 240));
-        btnMode.setIcon(new ImageIcon(getClass().getResource(isInitial
-                                                             ? expenseTracker.getString("night")
-                                                             : expenseTracker.getString("nighthover"))));
-        lblUsername.setForeground(new Color(51, 51, 51));
-        lblPassword.setForeground(new Color(51, 51, 51));
-        lblRePassword.setForeground(new Color(51, 51, 51));
-        lblSignUp.setForeground(new Color(51, 51, 51));
+        btnMode.setIcon(new ImageIcon(getClass().getResource(expenseTracker.getString(mode))));
+        BodyPanel.setBackground(colorBodyPanel);
+        lblUsername.setForeground(colorLbl);
+        lblPassword.setForeground(colorLbl);
+        lblRePassword.setForeground(colorLbl);
+        lblSignUp.setForeground(colorLbl);
 
         if (username.equals("enter your username"))
         {
 
-            tfUsername.setForeground(Color.BLACK);
-            tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+            tfUsername.setForeground(colorFields);
+            tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
         }
         if (password.equals("******"))
         {
 
-            pfPassword.setForeground(Color.BLACK);
-            pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+            pfPassword.setForeground(colorFields);
+            pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
         }
         if (repassword.equals("******"))
         {
 
-            pfRePassword.setForeground(Color.BLACK);
-            pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK));
+            pfRePassword.setForeground(colorFields);
+            pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorFields));
 
         }
-
-        future = 1;
-
-    }
-
-    private void onNightMode(boolean isInitial)
-    {
-
-        final String username = tfUsername.getText().toLowerCase().trim();
-        final String password = pfPassword.getText().trim();
-        final String repassword = pfRePassword.getText().trim();
-
-        btnMode.setIcon(new ImageIcon(getClass().getResource(isInitial
-                                                             ? expenseTracker.getString("day")
-                                                             : expenseTracker.getString("dayhover"))));
-        BodyPanel.setBackground(new Color(41, 41, 41));
-        lblUsername.setForeground(new Color(240, 240, 240));
-        lblPassword.setForeground(new Color(240, 240, 240));
-        lblRePassword.setForeground(new Color(240, 240, 240));
-        lblSignUp.setForeground(new Color(240, 240, 240));
-
-        if (username.equals("enter your username"))
-        {
-
-            tfUsername.setForeground(Color.GRAY);
-            tfUsername.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-
-        }
-        if (password.equals("******"))
-        {
-
-            pfPassword.setForeground(Color.GRAY);
-            pfPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-
-        }
-        if (repassword.equals("******"))
-        {
-
-            pfRePassword.setForeground(Color.GRAY);
-            pfRePassword.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-
-        }
-
-        future = 0;
 
     }
 
